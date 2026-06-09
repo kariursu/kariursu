@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kari Ursu · Discovery Call Guide</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+
+const phases = [
+  {
+    id: "warm",
+    label: "Warm Up",
+    time: "0–3 min",
+    color: "#C8A86B",
+    icon: "👋",
+    goal: "Build rapport, make them feel at ease",
+    script: [
+      { type: "say", text: "Hi [Name], so great to meet you! Thanks for making time today. Before we dive in — how did you hear about me?" },
+      { type: "say", text: "Tell me a little about [student name] — what grade are they going into this fall?" },
+      { type: "tip", text: "Let them talk first. Smile. This call should feel like a conversation with a trusted friend, not a sales pitch." }
+    ]
+  },
+  {
+    id: "discover",
+    label: "Discover",
+    time: "3–10 min",
+    color: "#2C5F8A",
+    icon: "🎯",
+    goal: "Understand their fears, situation, and what they actually need",
+    script: [
+      { type: "ask", text: "What's your biggest worry about the college application process right now?" },
+      { type: "ask", text: "Has your student started thinking about where they want to apply?" },
+      { type: "ask", text: "What does your student want their college experience to look like — big school, small school, specific major?" },
+      { type: "tip", text: "Listen more than you talk here. Their answers tell you exactly which package to pitch and how to frame your value. Take notes." },
+      { type: "tip", text: "Common answers to listen for: 'I don't know where to start', 'the essays terrify me', 'we don't know how to build a list', 'our school counselor is overwhelmed'. These are your openings." }
+    ]
+  },
+  {
+    id: "connect",
+    label: "Connect",
+    time: "10–15 min",
+    color: "#1A3A2A",
+    icon: "🤝",
+    goal: "Show them you understand their world — and why you're uniquely qualified",
+    script: [
+      { type: "say", text: "What you're describing is exactly what I help families navigate. The process can feel really overwhelming, especially because most school counselors are managing 300+ students — there's just no way to give individual attention." },
+      { type: "say", text: "My background is a little different. I've spent 10 years in college preparatory classrooms — I taught AP US History, ran AVID, coached students to state-level competitions. I have my Master's from Johns Hopkins. I've watched hundreds of students go through this process from the inside." },
+      { type: "say", text: "The families I work with tell me the biggest difference is that I work with a small number of students — so [student name] gets real, personalized attention every single session." },
+      { type: "tip", text: "Don't recite your whole résumé. Drop 2–3 credentials naturally into conversation, then move on. The goal is trust, not a performance." }
+    ]
+  },
+  {
+    id: "present",
+    label: "Present",
+    time: "15–18 min",
+    color: "#5C3D7A",
+    icon: "📋",
+    goal: "Present the right package based on what you heard — not all three",
+    script: [
+      { type: "say", text: "Based on what you've shared, I think the [Full Admissions Package / Essay Intensive / VIP] would be the best fit for [student name]. Let me tell you what that includes..." },
+      { type: "tip", text: "FULL ADMISSIONS ($4,500): Lead with this for families who seem overwhelmed, don't know where to start, or have a lot of ground to cover. 8 sessions, college list to final application." },
+      { type: "tip", text: "ESSAY INTENSIVE ($1,500): Lead with this if the family seems organized but just needs essay help. 4 sessions, personal statement + supplements." },
+      { type: "tip", text: "VIP ($8,500): Only offer if they mention a very specific top-choice school, seem highly motivated, or say something like 'we want to do everything right.' 2 spots only." },
+      { type: "say", text: "All sessions are virtual via Google Meet — no driving for you, flexible scheduling around your family's calendar. Most families find that easier than they expected." }
+    ]
+  },
+  {
+    id: "close",
+    label: "Close",
+    time: "18–20 min",
+    color: "#6B3A2A",
+    icon: "✅",
+    goal: "Get a yes — or surface the real objection so you can address it",
+    script: [
+      { type: "ask", text: "Does that feel like the right level of support for [student name]?" },
+      { type: "tip", text: "Then STOP TALKING. Let them respond. Silence after a close is normal — don't fill it." },
+      { type: "say", text: "IF YES: Wonderful! I'll send you the consulting agreement and a deposit invoice today — once that's in we're locked in and I'll send your onboarding packet. Does that work?" },
+      { type: "say", text: "IF 'WE NEED TO THINK': I completely understand. I do have a limited number of summer spots — I'd hate for you to lose the window. What questions can I answer to help you feel confident moving forward?" },
+      { type: "say", text: "IF 'IT'S EXPENSIVE': I hear you. What I'd say is — the essay and strategy work we do together is what actually changes outcomes. And at $4,500, that's less than one semester of textbooks at most schools. The investment in getting this right is real." },
+      { type: "say", text: "IF 'OUR COUNSELOR HANDLES THIS': That's great! Most school counselors are wonderful, but they're managing hundreds of students. I work with a small number of families so [student name] gets undivided attention — it's a very different experience." }
+    ]
+  },
+  {
+    id: "followup",
+    label: "Follow Up",
+    time: "Within 2 hrs",
+    color: "#444",
+    icon: "📧",
+    goal: "Strike while the iron is hot — send everything immediately after the call",
+    script: [
+      { type: "tip", text: "Send within 2 hours of the call. Every hour of delay reduces your conversion rate." },
+      { type: "say", text: "EMAIL TEMPLATE:\n\nHi [Name],\n\nSo great connecting today! I really enjoyed hearing about [student name] — [one specific detail from the call].\n\nAs promised, I've attached the consulting agreement and included the deposit link below. Once the 50% deposit is received, you'll be officially on my roster and I'll send your onboarding packet.\n\nDeposit: [Venmo/Zelle info]\nAgreement: [Google Doc link]\nIntake Form: [Google Form link]\n\nI'm excited to work with your family!\n\nWarmly,\nKari\nkariursu8@gmail.com | 941-773-9947" },
+      { type: "tip", text: "IF NO RESPONSE IN 3 DAYS: Send one follow-up: 'Hi [Name] — just bumping this up in case it got buried! Happy to answer any questions before you decide. Looking forward to working with [student]!'" }
+    ]
+  }
+];
+
+const typeStyles = {
+  say:  { bg: "#EBF5FF", border: "#2C5F8A", label: "SAY THIS", labelColor: "#2C5F8A" },
+  ask:  { bg: "#FFF8EB", border: "#C8A86B", label: "ASK THIS", labelColor: "#8A6C2C" },
+  tip:  { bg: "#F0FBF4", border: "#1A3A2A", label: "PRO TIP",  labelColor: "#1A3A2A" },
+};
+
+function DiscoveryCall() {
+  const [activePhase, setActivePhase] = useState(0);
+  const [showTimer, setShowTimer] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+  const [running, setRunning] = useState(false);
+  const timerRef = typeof window !== "undefined" ? null : null;
+
+  const startStop = () => {
+    if (running) {
+      setRunning(false);
+    } else {
+      setRunning(true);
+      const interval = setInterval(() => {
+        setSeconds(s => {
+          if (!running) clearInterval(interval);
+          return s + 1;
+        });
+      }, 1000);
+    }
+  };
+
+  const fmt = (s) => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+
+  const phase = phases[activePhase];
+
+  return (
+    <div style={{ fontFamily: "'Georgia', serif", background: "#F8F5F1", minHeight: "100vh", padding: "0" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+        * { box-sizing: border-box; }
+        .phase-tab { cursor: pointer; transition: all 0.18s; border: none; background: none; }
+        .phase-tab:hover { opacity: 0.85; }
+        .card { animation: slideUp 0.22s ease; }
+        @keyframes slideUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .nav-btn { cursor: pointer; transition: all 0.15s; border: none; }
+        .nav-btn:hover { filter: brightness(0.92); }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ background: "#1B2E4A", padding: "20px 20px 0", color: "#fff" }}>
+        <div style={{ maxWidth: 740, margin: "0 auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18, flexWrap: "wrap", gap: 10 }}>
+            <div>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#C8A86B", margin: "0 0 4px" }}>Kari Ursu · Discovery Call Guide</p>
+              <h1 style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "clamp(18px, 4vw, 26px)", margin: 0, fontWeight: 700 }}>20-Minute Discovery Call</h1>
+            </div>
+            <div style={{ background: "rgba(255,255,255,0.08)", borderRadius: 10, padding: "8px 14px", textAlign: "center" }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 22, fontWeight: 700, margin: 0, color: "#C8A86B" }}>{fmt(seconds)}</p>
+              <button onClick={() => setSeconds(s => running ? s : s)} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: "#aaa", background: "none", border: "none", cursor: "pointer", marginTop: 2 }}>
+                tap to reset
+              </button>
+            </div>
+          </div>
+
+          {/* Phase tabs */}
+          <div style={{ display: "flex", gap: 2, overflowX: "auto", paddingBottom: 0 }}>
+            {phases.map((p, i) => (
+              <button
+                key={i}
+                className="phase-tab"
+                onClick={() => setActivePhase(i)}
+                style={{
+                  padding: "8px 12px 10px",
+                  borderRadius: "8px 8px 0 0",
+                  background: activePhase === i ? "#F8F5F1" : "rgba(255,255,255,0.08)",
+                  color: activePhase === i ? p.color : "rgba(255,255,255,0.6)",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 12, fontWeight: activePhase === i ? 700 : 400,
+                  whiteSpace: "nowrap", flexShrink: 0
+                }}
+              >
+                {p.icon} {p.label}
+                <span style={{ display: "block", fontSize: 9, opacity: 0.7, marginTop: 1 }}>{p.time}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: 740, margin: "0 auto", padding: "24px 16px" }}>
+
+        {/* Phase header */}
+        <div className="card" style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+            <span style={{ fontSize: 28 }}>{phase.icon}</span>
+            <div>
+              <h2 style={{ fontFamily: "'Libre Baskerville', serif", fontSize: 20, margin: 0, color: "#1B2E4A" }}>{phase.label}</h2>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#888", margin: "2px 0 0" }}>
+                ⏱ {phase.time} &nbsp;·&nbsp; <span style={{ color: phase.color, fontWeight: 600 }}>Goal: {phase.goal}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Script cards */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {phase.script.map((item, i) => {
+            const s = typeStyles[item.type];
+            return (
+              <div key={i} className="card" style={{
+                background: s.bg, borderLeft: `3px solid ${s.border}`,
+                borderRadius: "0 10px 10px 0", padding: "12px 16px"
+              }}>
+                <span style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 9.5, fontWeight: 700,
+                  letterSpacing: 1.5, textTransform: "uppercase", color: s.labelColor,
+                  display: "block", marginBottom: 6
+                }}>{s.label}</span>
+                <p style={{
+                  fontFamily: item.type === "say" || item.type === "ask" ? "'Libre Baskerville', serif" : "'DM Sans', sans-serif",
+                  fontSize: item.type === "tip" ? 13 : 14,
+                  color: "#2a2a2a", margin: 0, lineHeight: 1.65,
+                  fontStyle: item.type === "say" ? "italic" : "normal",
+                  whiteSpace: "pre-line"
+                }}>{item.text}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Nav buttons */}
+        <div style={{ display: "flex", gap: 10, marginTop: 24, justifyContent: "space-between" }}>
+          <button
+            className="nav-btn"
+            onClick={() => setActivePhase(p => Math.max(0, p - 1))}
+            disabled={activePhase === 0}
+            style={{
+              background: activePhase === 0 ? "#e8e4de" : "#1B2E4A",
+              color: activePhase === 0 ? "#aaa" : "#fff",
+              padding: "10px 22px", borderRadius: 8,
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600,
+              cursor: activePhase === 0 ? "default" : "pointer"
+            }}
+          >← Previous</button>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#aaa", alignSelf: "center" }}>
+            {activePhase + 1} / {phases.length}
+          </div>
+          <button
+            className="nav-btn"
+            onClick={() => setActivePhase(p => Math.min(phases.length - 1, p + 1))}
+            disabled={activePhase === phases.length - 1}
+            style={{
+              background: activePhase === phases.length - 1 ? "#e8e4de" : phase.color,
+              color: activePhase === phases.length - 1 ? "#aaa" : "#fff",
+              padding: "10px 22px", borderRadius: 8,
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600,
+              cursor: activePhase === phases.length - 1 ? "default" : "pointer"
+            }}
+          >Next →</button>
+        </div>
+
+        {/* Objection quick ref */}
+        <div style={{ marginTop: 24, background: "#fff", borderRadius: 12, border: "1px solid #e5dfd6", overflow: "hidden" }}>
+          <div style={{ padding: "12px 18px", background: "#1B2E4A" }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#C8A86B", margin: 0 }}>Quick Objection Reference</p>
+          </div>
+          {[
+            ["We need to think about it", "Limited spots this summer — what questions can I answer to help you decide?"],
+            ["It's too expensive", "Less than one semester of textbooks. The investment in getting this right is real."],
+            ["Our counselor handles this", "They're managing 300+ students. I work with a small number — very different experience."],
+            ["My student isn't motivated", "Finding their story is what creates motivation. That's what Session 1 is all about."],
+          ].map(([obj, res], i) => (
+            <div key={i} style={{ padding: "10px 18px", borderTop: "1px solid #f0ebe2", display: "flex", gap: 14, alignItems: "flex-start" }}>
+              <div style={{ flexShrink: 0 }}>
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, background: "#FFF0EB", color: "#B85C38", padding: "2px 7px", borderRadius: 4, fontWeight: 600 }}>THEY SAY</span>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#555", margin: "0 0 3px", fontStyle: "italic" }}>"{obj}"</p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#1B2E4A", fontWeight: 600, margin: 0 }}>→ {res}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "#bbb", textAlign: "center", marginTop: 20 }}>
+          Kari Ursu · College Admissions Consulting · kariursu8@gmail.com
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(DiscoveryCall));
+</script>
+</body>
+</html>

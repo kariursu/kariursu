@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kari Ursu · 8-Week Action Plan</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+
+const weeks = [
+  {
+    week: "This Week",
+    dates: "June 1–7",
+    theme: "Launch",
+    color: "#B85C38",
+    accent: "#FFF0EB",
+    tasks: [
+      { id: "w1-1", priority: "🔴 Today", task: "Email Shannon Rymer at TFA", detail: "Warm personal ask — rising senior referrals. Draft is ready." },
+      { id: "w1-2", priority: "🔴 Today", task: "Email Dr. Holter at TFA", detail: "Professional version with credentials. Draft is ready." },
+      { id: "w1-3", priority: "🟠 Tomorrow", task: "Email Dr. Segraves at Clariden", detail: "Ask for family referrals AND colleague introductions at other Christian schools." },
+      { id: "w1-4", priority: "🟠 Tomorrow", task: "Set up Calendly (free)", detail: "Create a 20-min 'Discovery Call' link. You'll include this in all outreach." },
+      { id: "w1-5", priority: "🟡 This week", task: "Post on LinkedIn", detail: "Use the 'Punchy & urgent' version. Post Sunday evening or Monday morning for max reach." },
+      { id: "w1-6", priority: "🟡 This week", task: "Set up Venmo/Zelle/PayPal for payments", detail: "You need a way to collect money before your first client signs. Takes 10 minutes." },
+      { id: "w1-7", priority: "🟡 This week", task: "Write your personal outreach list", detail: "Write down 50 people: parents of teens, former colleagues, church contacts, neighbors. Aim for 50, text or message 20 this week." },
+    ]
+  },
+  {
+    week: "Week 2",
+    dates: "June 8–14",
+    theme: "Outreach",
+    color: "#2C5F8A",
+    accent: "#EBF2FA",
+    tasks: [
+      { id: "w2-1", priority: "🔴 High", task: "Send 30 more personal messages", detail: "Text, DM, or email people on your list. Personal > broadcast every time. Goal: 8–10 discovery calls booked." },
+      { id: "w2-2", priority: "🔴 High", task: "Follow up on Week 1 emails (TFA, Clariden)", detail: "If no reply by Day 5, send a short friendly follow-up. One follow-up doubles response rates." },
+      { id: "w2-3", priority: "🟠 Medium", task: "Create a simple intake form", detail: "Use Google Forms. Ask: student name, graduation year, dream schools, biggest concern. Sends to your Gmail automatically." },
+      { id: "w2-4", priority: "🟠 Medium", task: "Run your first discovery calls", detail: "Listen more than you talk. Ask: 'What's your biggest worry about this process?' Then show how your package solves it." },
+      { id: "w2-5", priority: "🟡 Lower", task: "Set up a free Notion or Google Doc client portal", detail: "One shared doc per client for notes, essays, deadlines. Looks professional, costs nothing." },
+      { id: "w2-6", priority: "🟡 Lower", task: "Second LinkedIn post", detail: "Share one college admissions tip (e.g. 'The #1 essay mistake I see'). Builds credibility with people watching your profile." },
+    ]
+  },
+  {
+    week: "Weeks 3–4",
+    dates: "June 15–28",
+    theme: "Close & Deliver",
+    color: "#1A3A2A",
+    accent: "#EBF5F0",
+    tasks: [
+      { id: "w3-1", priority: "🔴 High", task: "Close your first 4–5 paying clients", detail: "Send package options after every discovery call within 24 hours. Follow up if no response in 3 days." },
+      { id: "w3-2", priority: "🔴 High", task: "Send contracts + collect deposits", detail: "Use a simple contract (Google Docs template). Require 50% upfront. This protects your time." },
+      { id: "w3-3", priority: "🟠 Medium", task: "Begin first client sessions", detail: "Start with a deep-dive on the student — their story, values, activities. This is your edge over big consulting firms." },
+      { id: "w3-4", priority: "🟠 Medium", task: "Ask early clients for referrals", detail: "Ask at the START: 'If this goes well, would you introduce me to one other family?' Plant the seed early." },
+      { id: "w3-5", priority: "🟠 Medium", task: "Contact David Mathews at Clariden", detail: "Your former colleague is another warm referral source. Same ask — families with rising seniors." },
+      { id: "w3-6", priority: "🟡 Lower", task: "Reach out to ACSI network", detail: "Post in any ACSI educator groups or email contacts. Christian school families are your ideal client." },
+    ]
+  },
+  {
+    week: "Weeks 5–6",
+    dates: "June 29–July 12",
+    theme: "Stack & Upsell",
+    color: "#5C3D7A",
+    accent: "#F3EEF8",
+    tasks: [
+      { id: "w4-1", priority: "🔴 High", task: "Target 8–10 total active clients", detail: "At 35–40 hrs/week you can comfortably manage 8–10 students. This is your revenue peak window." },
+      { id: "w4-2", priority: "🔴 High", task: "Upsell Essay Intensive clients to Full Package", detail: "After session 2, many families will want more support. Offer an upgrade: 'I'd love to walk you through the full strategy — want to expand our work together?'" },
+      { id: "w4-3", priority: "🟠 Medium", task: "Collect first testimonials", detail: "Ask clients after session 3: 'Would you be willing to write 2–3 sentences about your experience so far?' Use these in your LinkedIn and outreach." },
+      { id: "w4-4", priority: "🟠 Medium", task: "Third LinkedIn post", detail: "'Spots are filling up for summer — 3 left.' Scarcity is real and honest. It will prompt fence-sitters to act." },
+      { id: "w4-5", priority: "🟡 Lower", task: "Explore Outschool or Varsity Tutors for supplemental income", detail: "If you have spare hours, these platforms can add $500–1,500/month with zero sales effort." },
+    ]
+  },
+  {
+    week: "Weeks 7–8",
+    dates: "July 13–31",
+    theme: "Close Strong",
+    color: "#8A6C2C",
+    accent: "#FAF4E8",
+    tasks: [
+      { id: "w5-1", priority: "🔴 High", task: "Final push to hit $40k", detail: "Track your revenue. If short, offer one more Essay Intensive or a discounted strategy session to close the gap." },
+      { id: "w5-2", priority: "🔴 High", task: "Book fall retainer clients", detail: "Offer existing clients a discounted monthly retainer through November 1 deadline. Recurring income beyond 8/1." },
+      { id: "w5-3", priority: "🟠 Medium", task: "Collect final testimonials", detail: "Written quotes + permission to share publicly. These become your best marketing asset for fall." },
+      { id: "w5-4", priority: "🟠 Medium", task: "Post results on LinkedIn", detail: "'This summer I helped X students navigate their college applications...' — social proof compounds." },
+      { id: "w5-5", priority: "🟡 Lower", task: "Plan fall PD consulting outreach", detail: "Reach back out to Dr. Segraves and Clariden contacts about fall PD projects now that you have momentum." },
+    ]
+  }
+];
+
+const tools = [
+  { name: "Calendly (free)", use: "Discovery call booking", url: "calendly.com" },
+  { name: "Google Forms", use: "Client intake form", url: "forms.google.com" },
+  { name: "Notion (free)", use: "Client portal / essay tracker", url: "notion.so" },
+  { name: "Venmo / Zelle", use: "Collect payments fast", url: "venmo.com" },
+  { name: "Google Docs", use: "Contracts + essay editing", url: "docs.google.com" },
+  { name: "LinkedIn", use: "Outreach + credibility posts", url: "linkedin.com" },
+];
+
+function ActionPlan() {
+  const [checked, setChecked] = useState({});
+  const [openWeek, setOpenWeek] = useState(0);
+
+  const toggle = (id) => setChecked(prev => ({ ...prev, [id]: !prev[id] }));
+
+  const totalTasks = weeks.reduce((a, w) => a + w.tasks.length, 0);
+  const completedTasks = Object.values(checked).filter(Boolean).length;
+  const pct = Math.round((completedTasks / totalTasks) * 100);
+
+  return (
+    <div style={{
+      fontFamily: "'Georgia', serif",
+      background: "#F9F7F4",
+      minHeight: "100vh",
+      padding: "32px 16px",
+    }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+        * { box-sizing: border-box; }
+        .week-header { cursor: pointer; transition: background 0.15s; }
+        .week-header:hover { filter: brightness(0.97); }
+        .task-row { transition: background 0.15s; }
+        .task-row:hover { background: rgba(0,0,0,0.02); }
+        .progress-bar { transition: width 0.6s cubic-bezier(.4,0,.2,1); }
+        .check-box { transition: all 0.15s; cursor: pointer; }
+        .check-box:hover { transform: scale(1.1); }
+      `}</style>
+
+      <div style={{ maxWidth: 780, margin: "0 auto" }}>
+
+        {/* Header */}
+        <div style={{ marginBottom: 32 }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: "#999", margin: "0 0 8px" }}>
+            Kari Ursu · College Admissions Consulting
+          </p>
+          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(26px, 5vw, 40px)", margin: "0 0 6px", lineHeight: 1.2 }}>
+            Your $40k Action Plan
+          </h1>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#777", margin: "0 0 20px" }}>
+            June 1 → August 1, 2026 · 8 weeks · ~35 hrs/week
+          </p>
+
+          {/* Progress */}
+          <div style={{ background: "#fff", borderRadius: 12, padding: "16px 20px", border: "1px solid #e8e3dc" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600 }}>
+                Overall Progress
+              </span>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#888" }}>
+                {completedTasks} / {totalTasks} tasks · {pct}%
+              </span>
+            </div>
+            <div style={{ background: "#f0ebe4", borderRadius: 6, height: 8, overflow: "hidden" }}>
+              <div className="progress-bar" style={{ background: "linear-gradient(90deg, #B85C38, #2C5F8A)", height: "100%", borderRadius: 6, width: `${pct}%`, minWidth: pct > 0 ? 8 : 0 }} />
+            </div>
+          </div>
+        </div>
+
+        {/* Weeks */}
+        {weeks.map((w, wi) => {
+          const weekDone = w.tasks.filter(t => checked[t.id]).length;
+          const isOpen = openWeek === wi;
+          return (
+            <div key={wi} style={{ marginBottom: 12, borderRadius: 14, overflow: "hidden", border: "1px solid #e8e3dc", boxShadow: isOpen ? "0 4px 20px rgba(0,0,0,0.07)" : "none" }}>
+              <div
+                className="week-header"
+                onClick={() => setOpenWeek(isOpen ? -1 : wi)}
+                style={{
+                  background: isOpen ? w.color : "#fff",
+                  color: isOpen ? "#fff" : "#1a1a1a",
+                  padding: "16px 20px",
+                  display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 8,
+                    background: isOpen ? "rgba(255,255,255,0.2)" : w.accent,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700,
+                    color: isOpen ? "#fff" : w.color, flexShrink: 0
+                  }}>
+                    W{wi + 1}
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 17, margin: 0, lineHeight: 1.2 }}>
+                      {w.week} — {w.theme}
+                    </p>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, margin: 0, opacity: 0.7 }}>
+                      {w.dates}
+                    </p>
+                  </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 600,
+                    background: isOpen ? "rgba(255,255,255,0.2)" : w.accent,
+                    color: isOpen ? "#fff" : w.color,
+                    padding: "3px 10px", borderRadius: 20
+                  }}>
+                    {weekDone}/{w.tasks.length}
+                  </span>
+                  <span style={{ fontSize: 18, opacity: 0.6 }}>{isOpen ? "▲" : "▼"}</span>
+                </div>
+              </div>
+
+              {isOpen && (
+                <div style={{ background: "#fff" }}>
+                  {w.tasks.map((t, ti) => (
+                    <div
+                      key={t.id}
+                      className="task-row"
+                      style={{
+                        padding: "14px 20px",
+                        borderTop: ti > 0 ? "1px solid #f5f0ea" : "none",
+                        display: "flex", gap: 14, alignItems: "flex-start"
+                      }}
+                    >
+                      <div
+                        className="check-box"
+                        onClick={() => toggle(t.id)}
+                        style={{
+                          width: 22, height: 22, borderRadius: 6, flexShrink: 0, marginTop: 1,
+                          border: `2px solid ${checked[t.id] ? w.color : "#d0c9be"}`,
+                          background: checked[t.id] ? w.color : "#fff",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          color: "#fff", fontSize: 13, fontWeight: 700
+                        }}
+                      >
+                        {checked[t.id] ? "✓" : ""}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 3 }}>
+                          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600, textDecoration: checked[t.id] ? "line-through" : "none", color: checked[t.id] ? "#aaa" : "#1a1a1a" }}>
+                            {t.task}
+                          </span>
+                          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11 }}>{t.priority}</span>
+                        </div>
+                        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#888", margin: 0, lineHeight: 1.5 }}>
+                          {t.detail}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* Free Tools */}
+        <div style={{ marginTop: 24, background: "#fff", borderRadius: 14, border: "1px solid #e8e3dc", overflow: "hidden" }}>
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0ebe4" }}>
+            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 18, margin: 0 }}>
+              Free Tools to Set Up This Week
+            </h3>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#888", margin: "4px 0 0" }}>
+              Everything you need — $0 to start
+            </p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 0 }}>
+            {tools.map((tool, i) => (
+              <div key={i} style={{ padding: "14px 20px", borderRight: "1px solid #f0ebe4", borderBottom: "1px solid #f0ebe4" }}>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, margin: "0 0 2px" }}>{tool.name}</p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#888", margin: "0 0 4px" }}>{tool.use}</p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "#2C5F8A", margin: 0 }}>{tool.url}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Revenue tracker */}
+        <div style={{ marginTop: 16, background: "#1A3A2A", borderRadius: 14, padding: "20px 24px", color: "#fff" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+            <div>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, opacity: 0.6, margin: "0 0 4px", textTransform: "uppercase", letterSpacing: 1 }}>Goal</p>
+              <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, margin: 0 }}>$40,000</p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, opacity: 0.6, margin: "4px 0 0" }}>by August 1, 2026</p>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, opacity: 0.7, margin: "0 0 6px" }}>Fastest path</p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, margin: "0 0 3px" }}>8 × Full Package ($3,500) = <strong>$28,000</strong></p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, margin: "0 0 3px" }}>4 × Essay Intensive ($1,500) = <strong>$6,000</strong></p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, margin: "0 0 3px" }}>1 × VIP ($6,000) = <strong>$6,000</strong></p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 700, borderTop: "1px solid rgba(255,255,255,0.2)", paddingTop: 6, marginTop: 6 }}>
+                Total: $40,000 ✓
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#bbb", textAlign: "center", marginTop: 20 }}>
+          Tap any week to expand · Check off tasks as you go
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(ActionPlan));
+</script>
+</body>
+</html>

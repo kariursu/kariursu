@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kari Ursu · Client Intake Form</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+
+const NAVY = "#1B2E4A";
+const GOLD = "#C8A86B";
+const WARM = "#F7F3EE";
+const WARM2 = "#EDE6DA";
+const MID = "#6B7A8D";
+const WHITE = "#FFFFFF";
+const GREEN = "#2A5C3A";
+
+const sections = [
+  {
+    id: "parent",
+    title: "Parent / Guardian Information",
+    icon: "👨‍👩‍👧",
+    color: NAVY,
+    fields: [
+      { id: "parent_name", label: "Parent / Guardian Full Name", type: "text", required: true, placeholder: "First and last name" },
+      { id: "parent_email", label: "Email Address", type: "email", required: true, placeholder: "your@email.com" },
+      { id: "parent_phone", label: "Phone Number", type: "tel", required: true, placeholder: "(941) 000-0000" },
+      { id: "contact_method", label: "Preferred Contact Method", type: "select", required: true,
+        options: ["Email", "Text message", "Phone call", "Any of the above"] },
+      { id: "session_times", label: "Preferred Session Days & Times", type: "textarea", required: true,
+        placeholder: "e.g. Weekday evenings after 6pm, Saturday mornings..." },
+      { id: "financial_aid", label: "Are you planning to apply for financial aid?", type: "select", required: true,
+        options: ["Yes — financial aid is important in our decision", "Possibly — we're still figuring this out", "No — we're not planning to apply for aid"] },
+      { id: "budget", label: "Approximate annual budget for college (tuition + room/board)", type: "select", required: false,
+        options: ["Under $20,000/year", "$20,000–$40,000/year", "$40,000–$60,000/year", "$60,000+/year", "Prefer not to say"] },
+      { id: "legacy", label: "Does your student have any legacy connections to specific colleges?", type: "textarea", required: false,
+        placeholder: "e.g. Parent attended University of Florida, grandparent attended Duke..." },
+      { id: "family_circumstances", label: "Any family circumstances Kari should be aware of?", type: "textarea", required: false,
+        placeholder: "e.g. recent family changes, health circumstances, anything that provides helpful context (completely optional and confidential)" },
+      { id: "testimonial_permission", label: "May Kari use anonymized feedback from this engagement in future marketing?", type: "select", required: true,
+        options: ["Yes — first name and school name is fine", "Yes — first name only please", "No — I prefer full confidentiality"] },
+    ]
+  },
+  {
+    id: "student_basics",
+    title: "Student Academic Profile",
+    icon: "📚",
+    color: "#2C5F8A",
+    fields: [
+      { id: "student_name", label: "Student Full Name", type: "text", required: true, placeholder: "First and last name" },
+      { id: "high_school", label: "High School Name", type: "text", required: true, placeholder: "School name and city/state" },
+      { id: "graduation_year", label: "Graduation Year", type: "select", required: true,
+        options: ["2026", "2027", "2028"] },
+      { id: "gpa_weighted", label: "Weighted GPA", type: "text", required: true, placeholder: "e.g. 4.2" },
+      { id: "gpa_unweighted", label: "Unweighted GPA", type: "text", required: true, placeholder: "e.g. 3.8" },
+      { id: "class_rank", label: "Class Rank (if your school provides it)", type: "text", required: false, placeholder: "e.g. Top 10%, 45 of 320, or 'School does not rank'" },
+      { id: "sat_act", label: "SAT / ACT Score(s)", type: "text", required: false, placeholder: "e.g. SAT 1280, ACT 29 — or 'Not yet taken, testing in October'" },
+      { id: "ap_courses", label: "AP / IB / Dual Enrollment Courses Taken or Planned", type: "textarea", required: false,
+        placeholder: "List each course and whether completed, in progress, or planned. Include scores for completed AP exams if known." },
+    ]
+  },
+  {
+    id: "student_activities",
+    title: "Activities, Awards & Experience",
+    icon: "🏆",
+    color: "#1A3A2A",
+    fields: [
+      { id: "activities", label: "Extracurricular Activities", type: "textarea", required: true,
+        placeholder: "List each activity, your role, years involved, and hours per week. Include clubs, sports, student government, arts, etc." },
+      { id: "leadership", label: "Leadership Roles", type: "textarea", required: false,
+        placeholder: "Any positions held: captain, president, editor, officer, advisor, etc." },
+      { id: "awards", label: "Awards & Honors", type: "textarea", required: false,
+        placeholder: "School, regional, state, or national awards. Include year received." },
+      { id: "work_experience", label: "Work or Internship Experience", type: "textarea", required: false,
+        placeholder: "Job title, employer, dates, and brief description. Include paid and unpaid positions." },
+      { id: "community_service", label: "Community Service & Volunteering", type: "textarea", required: false,
+        placeholder: "Organization, role, total hours, and dates." },
+      { id: "special_talents", label: "Any special talents, skills, or pursuits not listed above?", type: "textarea", required: false,
+        placeholder: "e.g. Competitive chess player, self-taught programmer, published writer, spoken word poet..." },
+    ]
+  },
+  {
+    id: "college_vision",
+    title: "College Vision & Preferences",
+    icon: "🗺️",
+    color: "#5C3D7A",
+    fields: [
+      { id: "intended_major", label: "Intended Major or Areas of Interest", type: "textarea", required: true,
+        placeholder: "List your top 1–3 interests. It's okay if you're undecided — just share what draws you most right now." },
+      { id: "dream_schools", label: "Dream Schools (up to 5)", type: "textarea", required: true,
+        placeholder: "List each school and one sentence about why it appeals to you." },
+      { id: "schools_researching", label: "Other Schools Already Researching or Considering", type: "textarea", required: false,
+        placeholder: "Any schools you've visited, toured virtually, or looked into seriously." },
+      { id: "school_size", label: "Preferred School Size", type: "select", required: true,
+        options: ["Small (under 3,000 students)", "Medium (3,000–10,000)", "Large (10,000+)", "No preference"] },
+      { id: "location_pref", label: "Location Preference", type: "select", required: true,
+        options: ["Stay in Florida", "Stay in Texas", "Southeast region", "Anywhere in the U.S.", "Open to international"] },
+      { id: "environment_pref", label: "Campus Environment Preference", type: "select", required: false,
+        options: ["Urban (city campus)", "Suburban", "Rural (traditional college town)", "No preference"] },
+      { id: "faith_pref", label: "Interest in Faith-Based Institutions?", type: "select", required: false,
+        options: ["Yes — important to us", "Open to it but not required", "No preference", "Prefer secular institution"] },
+      { id: "application_round", label: "Anticipated Application Round", type: "select", required: true,
+        options: ["Early Decision (binding — strong first choice)", "Early Action (non-binding — early feedback)", "Regular Decision", "Mix of EA and RD", "Not sure yet"] },
+      { id: "distance_from_home", label: "How far from home are you willing to go?", type: "select", required: true,
+        options: ["Same state only", "Within 4 hours driving", "Anywhere in the U.S.", "No restriction"] },
+    ]
+  },
+  {
+    id: "student_story",
+    title: "Student Story & Essay Prep",
+    icon: "✍️",
+    color: "#7A5C1A",
+    fields: [
+      { id: "proudest_achievement", label: "What is your proudest achievement — inside or outside of school?", type: "textarea", required: true,
+        placeholder: "This doesn't have to be an award or accolade. What are you genuinely most proud of?" },
+      { id: "challenge_overcome", label: "Describe a challenge or setback you've faced and how you handled it.", type: "textarea", required: false,
+        placeholder: "Be honest. Admissions officers value resilience and self-awareness over perfection." },
+      { id: "most_yourself", label: "When do you feel most like yourself? What are you doing?", type: "textarea", required: true,
+        placeholder: "This is one of the most important questions. Take your time." },
+      { id: "essay_ideas", label: "Any essay topics or ideas already floating around in your head?", type: "textarea", required: false,
+        placeholder: "Even a vague idea is helpful — 'something about my job', 'maybe my relationship with my grandma', etc." },
+      { id: "rec_teachers", label: "Two teachers you're considering for recommendation letters", type: "textarea", required: false,
+        placeholder: "Name and subject for each. Think: who knows you best as a thinker and person, not just who gave you an A." },
+      { id: "not_on_resume", label: "What do you want colleges to know about you that isn't on your résumé?", type: "textarea", required: true,
+        placeholder: "This is your most important answer. Don't overthink it — what would you want an admissions officer to know?" },
+      { id: "biggest_concern", label: "What is your biggest concern or worry about the application process?", type: "textarea", required: true,
+        placeholder: "Be honest — this helps Kari know where to focus first." },
+      { id: "anything_else", label: "Anything else Kari should know before your first session?", type: "textarea", required: false,
+        placeholder: "Open space — anything at all." },
+    ]
+  }
+];
+
+const progress_labels = ["Parent Info", "Academic Profile", "Activities", "College Vision", "Student Story"];
+
+function IntakeForm() {
+  const [currentSection, setCurrentSection] = useState(0);
+  const [formData, setFormData] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const section = sections[currentSection];
+  const isLast = currentSection === sections.length - 1;
+
+  const handleChange = (fieldId, value) => {
+    setFormData(prev => ({ ...prev, [fieldId]: value }));
+    if (errors[fieldId]) setErrors(prev => { const e = {...prev}; delete e[fieldId]; return e; });
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    section.fields.forEach(f => {
+      if (f.required && !formData[f.id]?.trim()) {
+        newErrors[f.id] = "This field is required";
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validate()) {
+      if (isLast) setSubmitted(true);
+      else { setCurrentSection(s => s + 1); window.scrollTo(0,0); }
+    }
+  };
+
+  const handleBack = () => {
+    setCurrentSection(s => s - 1);
+    window.scrollTo(0,0);
+  };
+
+  const pct = Math.round(((currentSection) / sections.length) * 100);
+
+  if (submitted) {
+    return (
+      <div style={{ fontFamily: "'Georgia', serif", background: WARM, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 16px" }}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');`}</style>
+        <div style={{ maxWidth: 520, width: "100%", textAlign: "center" }}>
+          <div style={{ width: 72, height: 72, borderRadius: "50%", background: GREEN, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", fontSize: 32 }}>✓</div>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 36, fontWeight: 600, color: NAVY, margin: "0 0 12px" }}>You're all set!</h1>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 300, color: MID, lineHeight: 1.7, margin: "0 0 32px" }}>
+            Thank you for completing the intake form. Kari will review everything before your first session and come prepared knowing your student's story.
+          </p>
+          <div style={{ background: WHITE, borderRadius: 12, padding: "24px 28px", border: "1px solid #E0D9CE", textAlign: "left" }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: GOLD, margin: "0 0 12px" }}>What Happens Next</p>
+            {["Kari will email you within 24 hours to confirm your first session date and time.", "You'll receive a shared Google Drive folder with session materials before Session 1.", "Your first session will focus on getting to know your student — come ready to talk!", "Questions before then? Email kariursu8@gmail.com or call 941-773-9947."].map((s, i) => (
+              <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 10 }}>
+                <div style={{ width: 22, height: 22, borderRadius: "50%", background: NAVY, color: GOLD, fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>{i+1}</div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#444", margin: 0, lineHeight: 1.5 }}>{s}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, fontStyle: "italic", color: GOLD, marginTop: 28 }}>
+            "Your student has a story worth telling well."
+          </p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MID, marginTop: 6 }}>— Kari Ursu · College Admissions Consulting</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ fontFamily: "'Georgia', serif", background: WARM, minHeight: "100vh" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+        * { box-sizing: border-box; }
+        input, textarea, select {
+          font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+          width: 100%; padding: 12px 16px; border-radius: 6px;
+          border: 1.5px solid #DDD6CC; background: #fff;
+          color: #1A1A1A; transition: border-color 0.2s, box-shadow 0.2s;
+          outline: none; appearance: none;
+        }
+        input:focus, textarea:focus, select:focus {
+          border-color: ${GOLD}; box-shadow: 0 0 0 3px rgba(200,168,107,0.12);
+        }
+        textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+        .field-error { border-color: #C0392B !important; }
+        .nav-btn { cursor: pointer; border: none; transition: all 0.18s; }
+        .nav-btn:hover { filter: brightness(0.93); transform: translateY(-1px); }
+        .prog-step { cursor: pointer; transition: all 0.15s; }
+        .prog-step:hover { opacity: 0.8; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ background: NAVY, padding: "0" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", padding: "20px 24px 0" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <div>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: GOLD, margin: "0 0 4px" }}>Kari Ursu · College Admissions Consulting</p>
+              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 600, color: WHITE, margin: 0 }}>Client Intake Form</h1>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", margin: "0 0 2px" }}>Section {currentSection + 1} of {sections.length}</p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600, color: GOLD, margin: 0 }}>{pct}% complete</p>
+            </div>
+          </div>
+
+          {/* Progress steps */}
+          <div style={{ display: "flex", gap: 2 }}>
+            {sections.map((s, i) => (
+              <div key={i} className="prog-step" onClick={() => i < currentSection && setCurrentSection(i)}
+                style={{ flex: 1, height: 4, borderRadius: 2, background: i <= currentSection ? GOLD : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
+            ))}
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 6, paddingBottom: 16 }}>
+            {progress_labels.map((l, i) => (
+              <span key={i} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 9, color: i <= currentSection ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)", letterSpacing: 0.5, flex: 1, textAlign: i === 0 ? "left" : i === progress_labels.length-1 ? "right" : "center" }}>{l}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Section content */}
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 24px 120px" }}>
+
+        {/* Section header */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: section.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>
+            {section.icon}
+          </div>
+          <div>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: MID, margin: "0 0 3px" }}>Section {currentSection + 1}</p>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 600, color: NAVY, margin: 0 }}>{section.title}</h2>
+          </div>
+        </div>
+
+        {/* Fields */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {section.fields.map((field) => (
+            <div key={field.id}>
+              <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: NAVY, display: "block", marginBottom: 6 }}>
+                {field.label}
+                {field.required && <span style={{ color: GOLD, marginLeft: 4 }}>*</span>}
+                {!field.required && <span style={{ color: MID, fontSize: 11, marginLeft: 6, fontWeight: 300 }}>(optional)</span>}
+              </label>
+
+              {field.type === "select" ? (
+                <div style={{ position: "relative" }}>
+                  <select
+                    className={errors[field.id] ? "field-error" : ""}
+                    value={formData[field.id] || ""}
+                    onChange={e => handleChange(field.id, e.target.value)}
+                    style={{ paddingRight: 36 }}
+                  >
+                    <option value="">Select an option...</option>
+                    {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: MID, fontSize: 12 }}>▼</span>
+                </div>
+              ) : field.type === "textarea" ? (
+                <textarea
+                  className={errors[field.id] ? "field-error" : ""}
+                  placeholder={field.placeholder}
+                  value={formData[field.id] || ""}
+                  onChange={e => handleChange(field.id, e.target.value)}
+                />
+              ) : (
+                <input
+                  type={field.type}
+                  className={errors[field.id] ? "field-error" : ""}
+                  placeholder={field.placeholder}
+                  value={formData[field.id] || ""}
+                  onChange={e => handleChange(field.id, e.target.value)}
+                />
+              )}
+
+              {errors[field.id] && (
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#C0392B", margin: "5px 0 0" }}>
+                  ⚠ {errors[field.id]}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom nav */}
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        background: WHITE, borderTop: "1px solid #E0D9CE",
+        padding: "16px 24px",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        boxShadow: "0 -4px 20px rgba(0,0,0,0.06)"
+      }}>
+        <div style={{ maxWidth: 720, width: "100%", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <button
+            className="nav-btn"
+            onClick={handleBack}
+            disabled={currentSection === 0}
+            style={{
+              background: currentSection === 0 ? "#F0EBE3" : WARM2,
+              color: currentSection === 0 ? "#CCC" : NAVY,
+              padding: "12px 28px", borderRadius: 6,
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600,
+              cursor: currentSection === 0 ? "default" : "pointer"
+            }}
+          >← Back</button>
+
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MID, margin: 0 }}>
+              {section.fields.filter(f => f.required).length} required · {section.fields.filter(f => !f.required).length} optional
+            </p>
+          </div>
+
+          <button
+            className="nav-btn"
+            onClick={handleNext}
+            style={{
+              background: isLast ? GREEN : NAVY,
+              color: WHITE,
+              padding: "12px 32px", borderRadius: 6,
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600,
+              cursor: "pointer"
+            }}
+          >{isLast ? "Submit ✓" : "Continue →"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(IntakeForm));
+</script>
+</body>
+</html>

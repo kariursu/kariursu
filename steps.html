@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kari Ursu · How to Make $40k by August 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #F8F6F3; color: #1a1a1a; padding: 24px 16px 80px; }
+  h1 { font-family: 'Lora', serif; font-size: clamp(24px, 5vw, 38px); line-height: 1.2; margin-bottom: 6px; }
+  .wrap { max-width: 800px; margin: 0 auto; }
+  .eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+  .subtitle { font-size: 14px; color: #777; margin-bottom: 20px; }
+
+  /* Progress */
+  .progress-box { background: #fff; border-radius: 12px; padding: 14px 18px; border: 1px solid #e5dfd6; margin-bottom: 28px; }
+  .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+  .progress-count { font-weight: 400; color: #888; }
+  .progress-track { background: #ede8e0; border-radius: 6px; height: 8px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, #B85C38, #2C5F8A, #1A3A2A); height: 100%; border-radius: 6px; transition: width 0.5s ease; min-width: 4px; }
+
+  /* Phase */
+  .phase { margin-bottom: 10px; border-radius: 14px; overflow: hidden; border: 1px solid #e5dfd6; }
+  .phase-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; cursor: pointer; user-select: none; transition: filter 0.15s; }
+  .phase-header:hover { filter: brightness(0.97); }
+  .phase-left { display: flex; align-items: center; gap: 14px; }
+  .phase-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .phase-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; margin-bottom: 2px; }
+  .phase-title { font-family: 'Lora', serif; font-size: 17px; font-weight: 700; margin-bottom: 2px; line-height: 1.2; }
+  .phase-sub { font-size: 12px; opacity: 0.65; }
+  .phase-badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .phase-arrow { font-size: 14px; opacity: 0.4; flex-shrink: 0; transition: transform 0.2s; }
+  .phase-arrow.open { transform: rotate(180deg); }
+
+  /* Steps */
+  .steps-body { background: #fff; }
+  .step-row { border-top: 1px solid #f0ebe2; padding: 14px 20px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; transition: background 0.1s; }
+  .step-row:hover { background: rgba(0,0,0,0.01); }
+  .checkbox { width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0; margin-top: 1px; border: 2px solid #d0c8bc; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.15s; }
+  .checkbox.done { color: #fff; }
+  .step-content { flex: 1; }
+  .step-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .step-title { font-family: 'Lora', serif; font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .step-title.done { text-decoration: line-through; color: #aaa; }
+  .step-time { font-size: 11px; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; white-space: nowrap; font-weight: 500; }
+
+  /* Expanded step */
+  .step-detail { padding: 0 20px 16px 54px; animation: slideIn 0.2s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .step-list { margin: 0 0 12px; padding: 0 0 0 16px; }
+  .step-list li { font-size: 13px; color: #444; line-height: 1.65; margin-bottom: 6px; }
+  .step-tip { padding: 10px 14px; border-radius: 0 8px 8px 0; }
+  .step-tip strong { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 3px; }
+  .step-tip p { font-size: 12px; margin: 0; line-height: 1.55; color: #555; }
+
+  /* Revenue box */
+  .revenue-box { background: #1A1A1A; border-radius: 14px; padding: 22px 24px; color: #fff; margin-top: 16px; }
+  .revenue-title { font-family: 'Lora', serif; font-size: 18px; margin-bottom: 14px; }
+  .revenue-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 13px; }
+  .revenue-row:last-of-type { border-bottom: none; }
+  .revenue-label { opacity: 0.65; }
+  .revenue-val { font-weight: 600; }
+  .revenue-total { display: flex; justify-content: space-between; padding-top: 12px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.15); }
+  .revenue-total-label { font-family: 'Lora', serif; font-size: 16px; }
+  .revenue-total-val { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: #C8A86B; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 24px; font-size: 11px; color: #bbb; letter-spacing: 0.5px; }
+
+  @media (max-width: 600px) {
+    .phase-sub { display: none; }
+    .step-detail { padding: 0 12px 14px 46px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Kari Ursu · Step-by-Step Guide</p>
+  <h1>How to Make $40k by August 1</h1>
+  <p class="subtitle">6 phases · Follow in order · Check off as you go</p>
+
+  <div class="progress-box">
+    <div class="progress-header">
+      <span>Your Progress</span>
+      <span class="progress-count" id="prog-text">0 / 18 steps · 0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-fill" style="width:1%"></div>
+    </div>
+  </div>
+
+  <div id="phases"></div>
+
+  <div class="revenue-box">
+    <div class="revenue-title">The Numbers at a Glance</div>
+    <div class="revenue-row"><span class="revenue-label">8 × Full Admissions Package</span><span class="revenue-val">$36,000</span></div>
+    <div class="revenue-row"><span class="revenue-label">3 × Essay Intensive</span><span class="revenue-val">$4,500</span></div>
+    <div class="revenue-row"><span class="revenue-label">1 × VIP Concierge (optional)</span><span class="revenue-val">$8,500</span></div>
+    <div class="revenue-total">
+      <span class="revenue-total-label">Without VIP (11 clients)</span>
+      <span class="revenue-total-val">$40,500 ✓</span>
+    </div>
+  </div>
+
+  <p class="footer">Kari Ursu · College Admissions Consulting · kariursu8@gmail.com · 941-773-9947</p>
+</div>
+
+<script>
+const phases = [
+  { id:1, phase:"Phase 1", title:"Set Up to Get Paid", subtitle:"Do this before anything else — takes 1–2 hours total", color:"#B85C38", light:"#FFF4F0", icon:"⚙️",
+    steps:[
+      { title:"Set up a way to collect money", time:"10 min", items:["Open Venmo, Zelle, or Stripe (all free) if you don't already have them","Test it by sending yourself $1 from another account","Write down your payment handle/email so you can share it instantly when someone says yes"], tip:"Don't wait on this. You want to be able to collect a deposit within minutes of a client saying yes." },
+      { title:"Create a Calendly account (free)", time:"15 min", items:["Go to calendly.com and sign up with your Gmail","Create one event type: '20-Minute Discovery Call'","Connect it to your Google Calendar so it shows your real availability","Set a buffer of 15 min after each call so you're never rushed","Copy your Calendly link — you'll paste this into every outreach message"], tip:"This eliminates the back-and-forth of scheduling. Families can book themselves instantly." },
+      { title:"Create a simple client intake form", time:"20 min", items:["Go to forms.google.com and create a new form","Add these fields: Student name, Parent name, Email, Phone, High school, Graduation year, GPA, Dream schools, Biggest concern, How did you hear about Kari?","Set responses to go to your Gmail automatically","Copy the form link to share after someone books a discovery call"], tip:"Reading this before each call means you show up already knowing their situation. Families will be impressed." },
+      { title:"Write a one-paragraph contract (Google Docs)", time:"20 min", items:["Open Google Docs and create a new document titled 'Consulting Agreement'","Include: your name, client name, package selected, total price, payment terms (50% upfront, 50% at midpoint), scope of work, and one cancellation clause","Keep it to one page — families won't read more than that","Make it a shareable Google Doc link so you can send it via email instantly"], tip:"Always collect 50% before your first session. This protects your time and signals you're a professional." },
+      { title:"Set up a client folder system in Google Drive", time:"10 min", items:["Create a main folder: 'Consulting Clients – Summer 2026'","Inside, create a template subfolder with: Essay Drafts, College List, Application Tracker, Session Notes","When you sign a new client, duplicate this folder and rename it with their name","Share their folder with them — it becomes your shared workspace"], tip:"This takes 2 minutes per new client and makes you look like you've been doing this for years." }
+    ]
+  },
+  { id:2, phase:"Phase 2", title:"Build Your Outreach List", subtitle:"Do this on Day 1 — it takes about 30 minutes", color:"#2C5F8A", light:"#EBF2FA", icon:"📋",
+    steps:[
+      { title:"Write your 50-person outreach list", time:"30 min", items:["Open a Google Doc or Notes app and start listing names — don't filter yet, just list","Go through these categories: Current and former TFA colleagues, Clariden colleagues, Church community members, Neighbors, Parents you know from your kids' school, Former students' parents, College or grad school friends with teenage kids, ACSI or KDP network","Aim for 50 names minimum — most people stop at 20, which is why they don't get enough clients","Add a note next to each name: do they have a teenager? Do they know someone who does?"], tip:"This list is your most valuable asset. Warm outreach converts 5–10x better than cold." },
+      { title:"Prioritize your list into 3 tiers", time:"10 min", items:["Tier 1 (send first): People who definitely have a rising senior or junior, or who you know will refer you immediately","Tier 2 (send this week): People who probably know families with teenagers — close colleagues, church friends, neighbors","Tier 3 (send next week): Anyone else on your list who might know someone"], tip:"Don't spray everyone at once. Start with your warmest contacts so you get responses fast — that momentum matters." }
+    ]
+  },
+  { id:3, phase:"Phase 3", title:"Send Your Outreach", subtitle:"This is where most people stall — don't overthink it, just send", color:"#5C3D7A", light:"#F3EEF8", icon:"✉️",
+    steps:[
+      { title:"Send Tier 1 emails today (your drafts are ready)", time:"20 min", items:["Open the email drafts already written for Dr. Holter and Shannon Rymer","Personalize each one with one specific detail — a memory, a shared experience","Send Dr. Segraves' email tomorrow — she can refer other school leaders too","Email David Mathews at Clariden this week with the same warm ask"], tip:"These 4 emails alone could fill your entire roster through referrals. Treat them as your highest priority." },
+      { title:"Send Tier 2 personal messages (text or DM)", time:"45 min", items:["Text or DM — not email — for close friends and contacts. It feels more personal","Keep it short: 'Hey [name]! I'm launching college admissions consulting this summer — do you know any families who could use support? Here's my booking link: [Calendly link]'","Send to 20 people from your Tier 2 list over 2–3 days","Do NOT send a group message or mass text — each one must feel individual"], tip:"The goal of every message is one thing: a reply. Keep it short enough that replying feels easy." },
+      { title:"Post on LinkedIn", time:"5 min", items:["Use the 'Punchy & urgent' LinkedIn draft already written for you","Post Sunday evening or Monday morning (highest engagement times)","Immediately comment on your own post: 'Happy to answer any questions — drop them below or DM me!'","Ask 2–3 close friends to like and comment within the first 30 minutes","Pin the post to the top of your profile"], tip:"Don't post and disappear. Engage with every comment within a few hours — it extends your reach significantly." },
+      { title:"Follow up on every non-response", time:"10 min/day", items:["If no response after 4–5 days, send one follow-up: 'Hey [name] — just wanted to bump this up in case it got buried!'","One follow-up roughly doubles your response rate","Do NOT send a third message — two is the limit for warm contacts","Track who you've messaged and when in a simple Google Sheet: Name | Date Sent | Response | Follow-up Sent"], tip:"Most people don't respond because life is busy — not because they're not interested. The follow-up is not annoying, it's helpful." }
+    ]
+  },
+  { id:4, phase:"Phase 4", title:"Run Discovery Calls That Convert", subtitle:"Done right, 60–70% of calls should convert", color:"#1A3A2A", light:"#EBF5F0", icon:"📞",
+    steps:[
+      { title:"Prepare before every call", time:"5 min", items:["Read their intake form before the call so you already know their situation","Google the student's school and note their graduation year","Have your 3 packages and prices pulled up so you can reference them","Have your Calendly link and payment info ready to send immediately after"], tip:"Showing up prepared signals professionalism and builds trust before you say a word." },
+      { title:"Run the call with this structure (20 minutes)", time:"20 min", items:["Minutes 0–3: Warm up. Ask how they found you, how the family is feeling about the process","Minutes 3–10: Ask and LISTEN: 'What's your biggest worry?' and 'What does your student want college to look like?'","Minutes 10–15: Share briefly how you work — mention your AP background and Johns Hopkins degree naturally","Minutes 15–18: Present the package that fits best — 'Based on what you've shared, I think the [Package] would be the best fit'","Minutes 18–20: Ask for the close: 'Does that feel like the right level of support for [student name]?'"], tip:"The family should talk more than you do. The more they talk, the more they convince themselves they need you." },
+      { title:"Handle the most common objections", time:"As needed", items:["'We need to think about it' → 'I do have limited spots this summer — what questions can I answer to help you decide?'","'It's expensive' → 'At $4,500 that's a fraction of one semester of tuition at most schools.'","'Our school counselor handles this' → 'They're managing 300–400 students. I work with a small number — very different experience.'","'My student isn't motivated yet' → 'Finding their story is what creates motivation. That's what Session 1 is all about.'"], tip:"Don't be defensive about objections — get curious. Ask 'What would help you feel more confident?' and listen." },
+      { title:"Close and collect deposit immediately", time:"5 min", items:["When they say yes: 'Wonderful! I'll send you the agreement and a deposit invoice right now.'","Send the contract link within 5 minutes of hanging up","Send the Zelle/Venmo/Stripe payment request at the same time","Follow up in 24 hours if no deposit: 'Just checking in — let me know if you have any questions!'","Do NOT start work until the deposit is received"], tip:"Speed matters here. The longer the gap between 'yes' and the deposit, the more likely they talk themselves out of it." }
+    ]
+  },
+  { id:5, phase:"Phase 5", title:"Deliver Outstanding Work", subtitle:"Happy clients = referrals = more clients. This is your growth engine.", color:"#8A6C2C", light:"#FAF4E8", icon:"⭐",
+    steps:[
+      { title:"Run a powerful first session", time:"60 min", items:["Share the client folder with them before the session","Spend the full first session on the student's story — proudest moments, biggest challenges, what makes them different","Take detailed notes directly in their shared Google Doc so they can see you're invested","End with 3 clear action items for the student before next session","Send a brief recap email within 2 hours"], tip:"The first session sets the tone for the entire engagement. Over-deliver here and they'll refer you before you even ask." },
+      { title:"Keep clients on track between sessions", time:"10 min/client/week", items:["Send a brief check-in mid-week: 'How's the essay draft coming? Let me know if you get stuck!'","Respond to emails within 24 hours — this is part of what they're paying for","Use their shared Google Doc to leave comments on drafts so feedback is organized","Keep a running application tracker in their folder: every school, deadline, essay requirements, status"], tip:"Consistent, proactive communication is what separates $4,500 consultants from $500 ones." },
+      { title:"Ask for referrals at the START, not the end", time:"2 min", items:["In session 2 or 3 say: 'I work with a small number of families — if you think of anyone who could benefit, I'd be so grateful for an introduction.'","Make it easy: 'You can just forward them my email — kariursu8@gmail.com or 941-773-9947'","Don't wait until the end of the engagement — that's too late in the summer"], tip:"One referral from a happy private school family is worth more than 10 cold LinkedIn connections." },
+      { title:"Collect testimonials before the engagement ends", time:"5 min", items:["Around session 4–5 email: 'Would you be willing to write 2–3 sentences about your experience so far?'","Use their words directly in your LinkedIn posts and future outreach","Ask permission to use their first name and school name (not last name)","Post one testimonial per week on LinkedIn — social proof compounds quickly"], tip:"A single genuine testimonial from a TFA or Clariden family is extraordinarily powerful in that community." }
+    ]
+  },
+  { id:6, phase:"Phase 6", title:"Track Revenue & Stay on Target", subtitle:"Know your numbers every week — don't wait until July to find out you're behind", color:"#555", light:"#F5F5F5", icon:"📊",
+    steps:[
+      { title:"Build a simple revenue tracker", time:"10 min", items:["Open Google Sheets and create columns: Client Name | Package | Total Value | Deposit Paid | Balance Due | Status","Update it every time you close a new client or receive a payment","Add a SUM formula at the bottom to see your running total at a glance","Check it every Monday morning to know exactly where you stand"], tip:"Knowing your number every week lets you adjust — add outreach, offer a promo, or upsell — before it's too late." },
+      { title:"Weekly check-in with yourself (every Monday)", time:"15 min", items:["How much have I collected so far?","How many active clients do I have?","How many discovery calls are booked this week?","Am I on track for $40k by August 1?","If behind: send 10 more personal messages today, post on LinkedIn, or follow up with warm leads who went quiet"], tip:"The families who book in July are the ones you reach out to in June. Keep outreach going even after you feel full." },
+      { title:"If you're behind at Week 5 — catch-up plan", time:"As needed", items:["Offer a limited-time 'Summer Sprint' Essay Intensive for $1,200 (slight discount, creates urgency)","Email every warm lead who didn't convert: 'I have one spot left — wanted to give you first right of refusal.'","Ask every current client for one referral immediately","Post a LinkedIn update with a client win (anonymized)"], tip:"Being behind at week 5 is normal and recoverable. One referral from a current client can add $4,500–$8,500 in a single conversation." }
+    ]
+  }
+];
+
+const checked = {};
+let openPhase = 0;
+const openSteps = {};
+
+const totalSteps = phases.reduce((a,p) => a + p.steps.length, 0);
+
+function updateProgress() {
+  const done = Object.values(checked).filter(Boolean).length;
+  const pct = Math.round((done / totalSteps) * 100);
+  document.getElementById('prog-text').textContent = `${done} / ${totalSteps} steps · ${pct}%`;
+  document.getElementById('prog-fill').style.width = Math.max(pct, 1) + '%';
+}
+
+function renderAll() {
+  const container = document.getElementById('phases');
+  container.innerHTML = '';
+  phases.forEach((phase, pi) => {
+    const isOpen = openPhase === pi;
+    const phaseDone = phase.steps.filter((_, si) => checked[`${phase.id}-${si}`]).length;
+    const div = document.createElement('div');
+    div.className = 'phase';
+    div.style.boxShadow = isOpen ? '0 4px 24px rgba(0,0,0,0.08)' : 'none';
+
+    const headerBg = isOpen ? phase.color : '#fff';
+    const headerColor = isOpen ? '#fff' : '#1a1a1a';
+    const badgeBg = isOpen ? 'rgba(255,255,255,0.2)' : phase.light;
+    const badgeColor = isOpen ? '#fff' : phase.color;
+
+    let stepsHTML = '';
+    if (isOpen) {
+      phase.steps.forEach((step, si) => {
+        const key = `${phase.id}-${si}`;
+        const isDone = checked[key];
+        const isStepOpen = openSteps[key];
+        const cbBg = isDone ? phase.color : '#fff';
+        const cbBorder = isDone ? phase.color : '#d0c8bc';
+
+        let detailHTML = '';
+        if (isStepOpen) {
+          const liItems = step.items.map(i => `<li>${i}</li>`).join('');
+          detailHTML = `
+            <div class="step-detail">
+              <ol class="step-list">${liItems}</ol>
+              <div class="step-tip" style="background:${phase.light}; border-left:3px solid ${phase.color};">
+                <strong style="color:${phase.color}">Pro tip:</strong>
+                <p>${step.tip}</p>
+              </div>
+            </div>`;
+        }
+
+        stepsHTML += `
+          <div class="step-row" onclick="toggleStep('${key}', ${pi})">
+            <div class="checkbox${isDone?' done':''}" style="background:${cbBg}; border-color:${cbBorder};"
+              onclick="toggleCheck(event,'${key}',${pi})">${isDone ? '✓' : ''}</div>
+            <div class="step-content">
+              <div class="step-top">
+                <div class="step-title${isDone?' done':''}">${step.title}</div>
+                <span class="step-time" style="background:${phase.light}; color:${phase.color}">⏱ ${step.time}</span>
+              </div>
+            </div>
+          </div>
+          ${detailHTML}`;
+      });
+    }
+
+    div.innerHTML = `
+      <div class="phase-header" style="background:${headerBg}; color:${headerColor};" onclick="togglePhase(${pi})">
+        <div class="phase-left">
+          <div class="phase-icon" style="background:${isOpen?'rgba(255,255,255,0.18)':phase.light}">${phase.icon}</div>
+          <div>
+            <div class="phase-label">${phase.phase}</div>
+            <div class="phase-title">${phase.title}</div>
+            <div class="phase-sub">${phase.subtitle}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <span class="phase-badge" style="background:${badgeBg}; color:${badgeColor}">${phaseDone}/${phase.steps.length}</span>
+          <span class="phase-arrow${isOpen?' open':''}">▼</span>
+        </div>
+      </div>
+      ${isOpen ? `<div class="steps-body">${stepsHTML}</div>` : ''}`;
+    container.appendChild(div);
+  });
+  updateProgress();
+}
+
+function togglePhase(pi) {
+  openPhase = (openPhase === pi) ? -1 : pi;
+  renderAll();
+}
+
+function toggleStep(key, pi) {
+  openSteps[key] = !openSteps[key];
+  renderAll();
+}
+
+function toggleCheck(e, key, pi) {
+  e.stopPropagation();
+  checked[key] = !checked[key];
+  renderAll();
+}
+
+renderAll();
+</script>
+</body>
+</html>

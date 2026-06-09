@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kari Ursu · Session Materials</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+
+const sessions = [
+  {
+    id: 1,
+    session: "Session 1",
+    title: "Student Story & Discovery",
+    goal: "Understand who the student is before touching a single application",
+    color: "#2C4A7C",
+    light: "#EEF3FB",
+    icon: "🧭",
+    duration: "60 min",
+    agenda: ["Introductions & relationship building (10 min)", "Student story deep-dive (30 min)", "Values & vision exercise (15 min)", "Action items & next steps (5 min)"],
+    materials: [
+      {
+        title: "Student Story Questions",
+        type: "Discussion Guide",
+        content: [
+          { section: "Identity & Background", questions: [
+            "Tell me about yourself — not your résumé, but YOU. What do you care about most?",
+            "What does a typical week look like for you outside of school?",
+            "What's something about you that would surprise most people?",
+            "What do you do when you're not being graded or evaluated?",
+            "Who in your life has shaped you the most, and how?"
+          ]},
+          { section: "Defining Moments", questions: [
+            "Tell me about a time you failed at something. What happened and what did you take from it?",
+            "What's the hardest thing you've ever done?",
+            "Describe a moment when you felt most like yourself.",
+            "What's a problem — big or small — that you've actually done something about?",
+            "Is there something you've built, created, or started that you're proud of?"
+          ]},
+          { section: "College Vision", questions: [
+            "Why do you want to go to college? What do you hope it gives you?",
+            "What do you want to study, and why does that subject matter to you?",
+            "Describe your ideal college environment — size, location, culture, feel.",
+            "What would make you feel like college was a success when you graduate?",
+            "If you could spend four years doing anything, what would it be?"
+          ]},
+          { section: "Values Exploration", questions: [
+            "What do you believe that most people around you don't?",
+            "What cause or issue keeps you up at night?",
+            "When have you stood up for something even when it was hard?",
+            "What role does your faith, culture, or family background play in who you are?"
+          ]}
+        ]
+      },
+      {
+        title: "Values Ranking Exercise",
+        type: "Student Worksheet",
+        content: [
+          { section: "Instructions", questions: ["Ask the student to circle their top 6 values from the list below, then rank them 1–6. This exercise often unlocks powerful essay themes."] },
+          { section: "Values List", questions: [
+            "Achievement · Adventure · Authenticity · Balance · Belonging · Compassion",
+            "Courage · Creativity · Curiosity · Discipline · Excellence · Faith",
+            "Family · Freedom · Growth · Humor · Impact · Independence",
+            "Integrity · Justice · Kindness · Leadership · Learning · Loyalty",
+            "Perseverance · Purpose · Resilience · Service · Truth · Wisdom"
+          ]},
+          { section: "Reflection", questions: [
+            "Look at your top 3 values — can you name one experience that reflects each one?",
+            "Which of these values do you think admissions officers rarely see in applications?",
+            "Which value feels most central to the story you want to tell in your application?"
+          ]}
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    session: "Session 2",
+    title: "College List Strategy",
+    goal: "Build a balanced, realistic list of 10–14 schools the student is genuinely excited about",
+    color: "#6B3A2A",
+    light: "#FBF0EC",
+    icon: "🗺️",
+    duration: "60 min",
+    agenda: ["Review Session 1 takeaways (5 min)", "College list criteria exercise (20 min)", "Build the list together (25 min)", "Research assignments & action items (10 min)"],
+    materials: [
+      {
+        title: "College List Criteria Worksheet",
+        type: "Student Worksheet",
+        content: [
+          { section: "Academic Fit", questions: [
+            "What do you want to study? (List top 2–3 majors or areas of interest)",
+            "How strong is your GPA? (Be honest — this shapes your list more than anything)",
+            "Have you taken SAT/ACT? What are your scores?",
+            "Do you want a university known for research, teaching, or a balance of both?",
+            "Are you interested in any specific programs (honors, ROTC, study abroad)?"
+          ]},
+          { section: "Environment & Culture", questions: [
+            "Large university (10,000+), medium (3,000–10,000), or small (under 3,000)?",
+            "Urban, suburban, or rural campus?",
+            "How far from home are you willing to go? (same state / within 4 hrs / anywhere?)",
+            "Public or private? Faith-based or secular?",
+            "What does your ideal campus community feel like?"
+          ]},
+          { section: "Financial Reality", questions: [
+            "What is your family's approximate budget for college per year?",
+            "Is merit scholarship availability important in choosing schools?",
+            "Have your parents discussed EFC (Expected Family Contribution)?",
+            "Are you open to schools that are known for generous financial aid?"
+          ]},
+          { section: "List Balance Guide (share with student)", questions: [
+            "LIKELY (3–4 schools): Your GPA/scores are above their 75th percentile. You'd almost certainly get in.",
+            "MATCH (5–6 schools): Your stats fall right in their middle 50%. You have a solid shot.",
+            "REACH (3–4 schools): Your stats are below their 50th percentile OR it's a highly selective school (under 20% acceptance rate).",
+            "RULE: Never apply to a school you wouldn't genuinely attend. Every school on this list should excite you."
+          ]}
+        ]
+      },
+      {
+        title: "College Research Assignment",
+        type: "Student Homework",
+        content: [
+          { section: "Before Next Session, Research 3 Schools", questions: [
+            "For each school: What program would you apply to, and why does it appeal to you?",
+            "For each school: Find one specific thing about that school you couldn't find anywhere else (a professor, a lab, a tradition, a program).",
+            "For each school: Read 3 student reviews on Niche.com or Reddit. What's the honest picture?",
+            "For each school: Look up their Common Data Set — Google '[School Name] Common Data Set 2025'. Find Section C for acceptance rates and Section H for financial aid.",
+            "Come to Session 3 ready to talk about each school for 2 minutes."
+          ]},
+          { section: "Resources to Use", questions: [
+            "College Scorecard (collegescorecard.ed.gov) — graduation rates, salary outcomes, cost",
+            "Niche.com — student reviews and rankings",
+            "The Princeton Review (princetonreview.com) — campus culture profiles",
+            "Common Data Sets — raw admissions statistics, more reliable than marketing materials",
+            "Each school's financial aid net price calculator"
+          ]}
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    session: "Session 3",
+    title: "Personal Statement Strategy",
+    goal: "Identify the essay topic and angle that will make this student unforgettable",
+    color: "#1A3A2A",
+    light: "#EBF5F0",
+    icon: "✍️",
+    duration: "60 min",
+    agenda: ["College list check-in (10 min)", "Essay topic brainstorm (30 min)", "Topic selection & angle (15 min)", "Draft 1 assignment (5 min)"],
+    materials: [
+      {
+        title: "Personal Statement Brainstorm",
+        type: "Discussion Guide",
+        content: [
+          { section: "The Core Question", questions: [
+            "What do you want admissions officers to know about you that they can't find anywhere else in your application?",
+            "Your essay is NOT a summary of your résumé. It is the one place they meet YOU.",
+            "The best essays are specific, honest, and reveal character. Avoid: mission trips, sports injuries, and 'I want to help people.'"
+          ]},
+          { section: "Topic Mining Questions", questions: [
+            "What do you do at 10pm on a Friday when no one is watching and there are no assignments due?",
+            "What's a topic you could talk about for 30 minutes without stopping?",
+            "What's a small, ordinary thing in your life that actually means something significant to you?",
+            "Describe a moment when your opinion about something changed completely.",
+            "What's something you've made, built, written, coded, cooked, or created that you're proud of?",
+            "Tell me about your bedroom, your car, your phone — what does it say about who you are?",
+            "What's a tradition, ritual, or habit in your family that shaped you?",
+            "When have you disagreed with everyone around you and turned out to be right?"
+          ]},
+          { section: "Common App Prompt Guide", questions: [
+            "Prompt 1 — Background/Identity: Best for students with a unique cultural, family, or personal story.",
+            "Prompt 2 — Challenge/Failure: Best for students with a genuine setback that led to real growth.",
+            "Prompt 3 — Belief/Idea Challenged: Best for intellectual, curious students with strong convictions.",
+            "Prompt 4 — Gratitude/Someone Who Influenced You: Risky — must stay focused on YOU, not them.",
+            "Prompt 5 — Accomplishment/Event/Realization: Best for a specific turning point or discovery.",
+            "Prompt 6 — Topic of Your Choice: Best for students with a truly unique angle that fits no other prompt.",
+            "Prompt 7 — Free Topic: Maximum freedom — use when you have a story that doesn't fit anywhere else."
+          ]},
+          { section: "Essay Evaluation Criteria", questions: [
+            "SPECIFICITY: Does it have concrete details, scenes, and sensory language — or is it vague and generic?",
+            "VOICE: Does it sound like a 17-year-old wrote it — or like a committee?",
+            "INSIGHT: Does it reveal how the student thinks and what they value?",
+            "FORWARD MOMENTUM: Does it end with a sense of who this student is becoming?",
+            "UNIQUENESS: Could this essay have been written by someone else? If yes, revise."
+          ]}
+        ]
+      },
+      {
+        title: "Draft 1 Writing Assignment",
+        type: "Student Homework",
+        content: [
+          { section: "Instructions for Draft 1", questions: [
+            "Write 650 words. Don't worry about it being good — just get it out.",
+            "Start in the middle of a scene or moment, not with 'I was born in...' or 'Ever since I was little...'",
+            "Use the word 'I' — this is about YOU. Don't hide behind passive voice.",
+            "Write it like you're telling the story to a trusted adult who genuinely wants to know you.",
+            "Don't edit while you write. Turn off your inner critic for Draft 1.",
+            "Share Draft 1 in your Google Doc folder before our next session."
+          ]},
+          { section: "What Kari Will Look For in Draft 1", questions: [
+            "Is there a clear central moment or thread?",
+            "Is the student's voice authentic and present?",
+            "Where is the insight — the moment of meaning or realization?",
+            "What needs to be cut, expanded, or shifted?",
+            "Does the ending land? Does it leave us wanting to meet this person?"
+          ]}
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    session: "Session 4",
+    title: "Essay Feedback & Revision",
+    goal: "Transform Draft 1 into a compelling, authentic, well-structured essay",
+    color: "#5C3D7A",
+    light: "#F3EEF8",
+    icon: "🔍",
+    duration: "60 min",
+    agenda: ["Read draft together aloud (10 min)", "Strength-based feedback (10 min)", "Revision priorities (25 min)", "Draft 2 assignment (5 min)", "Supplemental essay overview (10 min)"],
+    materials: [
+      {
+        title: "Essay Feedback Framework",
+        type: "Consultant Guide",
+        content: [
+          { section: "Step 1: Read Aloud First", questions: [
+            "Always read the essay aloud — either you or the student.",
+            "Where does it feel natural? Where does it stumble?",
+            "Where do you lose interest? That's where the revision is needed.",
+            "What single sentence best captures the student's voice? Anchor the revision to that."
+          ]},
+          { section: "Structural Checklist", questions: [
+            "OPENING: Does it start with a scene, image, or moment — not a thesis statement?",
+            "MIDDLE: Is there a clear narrative arc with tension or development?",
+            "INSIGHT: Is there a moment where the student reflects and reveals how they think?",
+            "ENDING: Does it close with forward momentum — not a summary of what you just read?",
+            "WORD COUNT: Is it between 600–650 words? (Under 550 feels thin; over 650 gets cut off)"
+          ]},
+          { section: "Common Issues & Fixes", questions: [
+            "Too vague → Ask: 'Can you give me one specific detail, image, or moment here?'",
+            "Sounds like an adult wrote it → Ask: 'How would you say this if you were texting a friend?'",
+            "Résumé rehash → Ask: 'What does this activity mean to you, not what did you do?'",
+            "Weak ending → Try: 'What do you want the admissions officer to think about you after the last line?'",
+            "No insight → Ask: 'So what? Why does this moment matter to the person you're becoming?'"
+          ]},
+          { section: "Feedback Delivery Method", questions: [
+            "Start with what's WORKING — find 2–3 genuine strengths before anything else.",
+            "Frame every critique as a question, not a command: 'I wonder if...' or 'What if this paragraph started with...'",
+            "Give no more than 3 revision priorities per draft — too many notes paralyze students.",
+            "End every feedback session with: 'Your story is worth telling. Here's how we make it land.'"
+          ]}
+        ]
+      },
+      {
+        title: "Supplemental Essay Guide",
+        type: "Student Worksheet",
+        content: [
+          { section: "The 'Why This School' Essay (most common supplement)", questions: [
+            "RULE: Generic 'Why Us' essays are the #1 thing admissions officers complain about.",
+            "MUST include: 1–2 specific programs, professors, or opportunities you can ONLY find at that school.",
+            "MUST NOT include: location, weather, rankings, campus beauty, or anything on every school's website.",
+            "Structure: What you want to study → specific resource at this school that serves that goal → how you'll contribute to their community.",
+            "Research tool: Read the school's course catalog, faculty profiles, and student newspaper — not just their homepage."
+          ]},
+          { section: "The Activities/Extracurriculars Section", questions: [
+            "You have 150 characters per activity. Every word must earn its place.",
+            "Lead with impact and specificity: NOT 'I was in NHS' but 'Planned 12 service events for 85 members; raised $3,200 for local food pantry.'",
+            "List activities in order of importance to YOU, not prestige.",
+            "Don't leave slots empty — use them for informal activities, jobs, family responsibilities, or personal projects.",
+            "Honors and awards: list selectively. 9th grade perfect attendance is not a college award."
+          ]},
+          { section: "Short Answer & Additional Info Section", questions: [
+            "Use the additional information section ONLY if you have something meaningful to add — a gap in grades, a family circumstance, an unusual achievement.",
+            "Do NOT use it to repeat what's already in your application.",
+            "If you have a significant challenge (illness, family crisis, learning difference) — this is where you briefly and factually explain it."
+          ]}
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    session: "Session 5",
+    title: "Application Strategy & Timeline",
+    goal: "Build a realistic, school-by-school plan so nothing falls through the cracks",
+    color: "#7A5C1A",
+    light: "#FAF4E8",
+    icon: "📅",
+    duration: "60 min",
+    agenda: ["Essay progress check (10 min)", "Application timeline build (25 min)", "Early Decision/Early Action strategy (15 min)", "Parent Q&A if applicable (10 min)"],
+    materials: [
+      {
+        title: "Application Timeline Tracker",
+        type: "Student Worksheet",
+        content: [
+          { section: "Key Deadlines to Know", questions: [
+            "Early Decision (ED): Typically November 1 or November 15. Binding — you MUST attend if accepted. Best if you have a clear first choice.",
+            "Early Action (EA): Typically November 1 or November 15. Non-binding — you hear early but can compare offers. Almost always worth applying EA if available.",
+            "Regular Decision (RD): Typically January 1–15. Non-binding. Use for schools where you want to compare financial aid.",
+            "Common App opens: August 1. You can start working on it now.",
+            "FAFSA opens: October 1. File as early as possible — some aid is first-come, first-served."
+          ]},
+          { section: "School-by-School Action Plan", questions: [
+            "For each school on your list, answer: What round are you applying? (ED/EA/RD)",
+            "For each school: What supplements are required and how long are they?",
+            "For each school: What is the exact deadline?",
+            "For each school: Have you requested a teacher recommendation that fits this school's requirements?",
+            "For each school: Does this school require an interview? If so, when do you need to request it?"
+          ]},
+          { section: "Summer Action Items (June–August)", questions: [
+            "June: Finalize college list. Start Common App profile. Begin personal statement Draft 1.",
+            "July: Complete personal statement (all drafts). Start 2–3 'Why Us' supplements for top schools.",
+            "August 1: Common App opens for new cycle. Submit your application to at least one EA school.",
+            "August: Request teacher recommendations (give teachers 6+ weeks before deadline).",
+            "August: Request counselor recommendation and school report."
+          ]},
+          { section: "Recommendation Letter Strategy", questions: [
+            "Choose teachers who KNOW you — not just teachers you got an A from.",
+            "Ideal recommenders: Junior year teachers in core subjects who saw you think, struggle, and grow.",
+            "When you ask, give them: your résumé, a list of schools, why you chose them specifically, and 2–3 stories they could tell about you.",
+            "Always follow up with a thank-you note — handwritten if possible.",
+            "Waive your right to see the recommendations. Admissions officers take non-waived letters less seriously."
+          ]}
+        ]
+      },
+      {
+        title: "ED vs EA vs RD Decision Guide",
+        type: "Discussion Guide",
+        content: [
+          { section: "Should You Apply Early Decision?", questions: [
+            "Apply ED if: You have a clear #1 school you'd attend regardless of cost, AND your application is genuinely strong, AND your family has had a frank financial conversation and is comfortable committing without comparing offers.",
+            "Do NOT apply ED if: You need to compare financial aid offers, you're unsure which school you prefer, or your application would be significantly stronger with more time.",
+            "ED advantage: Acceptance rates at most schools are significantly higher in the ED round — sometimes 2x the RD rate.",
+            "ED risk: You're locked in. If the financial aid package is insufficient and you can't negotiate, you're in a difficult position."
+          ]},
+          { section: "Early Action Schools to Prioritize", questions: [
+            "Apply EA to every school on your list that offers it — there is almost no downside.",
+            "EA gives you early feedback, reduces senior-year stress, and sometimes results in merit scholarship priority.",
+            "Exception: Some schools have Restrictive Early Action (REA) — you can only apply EA to one school. Georgetown, Notre Dame, and Harvard are examples.",
+            "Always check each school's EA/ED policy individually on their admissions website."
+          ]}
+        ]
+      }
+    ]
+  },
+  {
+    id: 6,
+    session: "Session 6",
+    title: "Interview Prep",
+    goal: "Help the student walk into any college interview feeling confident and prepared",
+    color: "#2A5C5C",
+    light: "#EBF5F5",
+    icon: "🎤",
+    duration: "60 min",
+    agenda: ["Interview overview & formats (10 min)", "Mock interview round 1 (20 min)", "Debrief & coaching (15 min)", "Mock interview round 2 (15 min)"],
+    materials: [
+      {
+        title: "Interview Preparation Guide",
+        type: "Student Worksheet",
+        content: [
+          { section: "Know Your Interview Format", questions: [
+            "Alumni interview: Conversational, evaluative but low-stakes. Alumni report back to admissions. Be yourself.",
+            "Admissions officer interview: Higher stakes. More structured. Treat it like a professional conversation.",
+            "On-campus interview: Shows demonstrated interest. Dress one level up from campus casual.",
+            "Virtual interview: Treat it exactly like in-person. Camera on. Professional background. Eye contact with the camera, not the screen.",
+            "Most important: Research whether the interview is evaluative (counts) or informational (info-sharing). Both matter."
+          ]},
+          { section: "Must-Know Questions to Practice", questions: [
+            "Tell me about yourself. (Practice a 90-second response — not your whole life, just what matters most right now)",
+            "Why do you want to attend [this school]? (Must be specific — generic answers are the #1 interview mistake)",
+            "What do you want to study and why?",
+            "What's a challenge you've faced and how did you handle it?",
+            "What would your friends say is your biggest strength? Your biggest weakness?",
+            "What's something you've done that isn't on your application?",
+            "What book, film, idea, or experience has shaped how you see the world?",
+            "What do you hope to contribute to our campus community?",
+            "Do you have any questions for me? (ALWAYS have 2–3 prepared — see below)"
+          ]},
+          { section: "Questions to Ask Your Interviewer", questions: [
+            "'What do students here wish they'd known before they arrived?'",
+            "'How has attending this school changed the way you think?' (for alumni)",
+            "'What kinds of students thrive here — and what kinds struggle?'",
+            "'If you could go back and do one thing differently during your time here, what would it be?'",
+            "NEVER ask: anything on the school's homepage, about acceptance rates, or about transferring."
+          ]},
+          { section: "Interview Mindset Coaching", questions: [
+            "The interviewer wants you to do well. They are not trying to trick you.",
+            "Silence is okay. Take 3 seconds to think before answering a hard question.",
+            "If you don't know something — say so honestly. Authenticity > performance.",
+            "The goal is a conversation, not a presentation. Ask them questions too.",
+            "End strong: 'Thank you so much — this conversation made me even more excited about [school].'"
+          ]}
+        ]
+      },
+      {
+        title: "Mock Interview Score Sheet",
+        type: "Consultant Guide",
+        content: [
+          { section: "Rate the Student 1–5 on Each Area", questions: [
+            "CLARITY: Did they answer the question that was asked — clearly and concisely?",
+            "SPECIFICITY: Did they use concrete examples, stories, and details — not generalities?",
+            "AUTHENTICITY: Did they sound like themselves — or rehearsed and performative?",
+            "ENGAGEMENT: Did they show genuine enthusiasm for the school and the conversation?",
+            "LISTENING: Did they respond to what was actually said — or just deliver a prepared speech?",
+            "BODY LANGUAGE: Eye contact, posture, pace — did they seem confident and present?"
+          ]},
+          { section: "Debrief Questions After Round 1", questions: [
+            "'How did that feel from the inside? What do you wish you'd said differently?'",
+            "'Which answer are you most proud of? Why?'",
+            "'Which question caught you off guard? Let's work on that one.'",
+            "'On a scale of 1–10, how authentic did you feel? What would make it a 10?'"
+          ]}
+        ]
+      }
+    ]
+  },
+  {
+    id: 7,
+    session: "Session 7",
+    title: "Supplemental Essays & School-Specific Strategy",
+    goal: "Build compelling, specific supplemental essays for every school on the list",
+    color: "#2A5C3A",
+    light: "#EBF5F0",
+    icon: "🏫",
+    duration: "60 min",
+    agenda: ["Review college list & supplement requirements (10 min)", "Why Us essay strategy (20 min)", "Short answer & additional prompts (20 min)", "Supplement writing assignments (10 min)"],
+    materials: [
+      {
+        title: "Why Us Essay Masterclass",
+        type: "Discussion Guide",
+        content: [
+          { section: "The Core Problem", questions: [
+            "The 'Why Us' essay is the most commonly failed supplement — and the most important one.",
+            "Admissions officers read thousands of essays about location, weather, rankings, and 'vibrant campus community.' These say nothing.",
+            "A strong 'Why Us' answers one question: Why THIS school specifically for THIS student — and how will YOU contribute to US?",
+            "RULE: If your essay could apply to any other school with a name swap, it's not strong enough."
+          ]},
+          { section: "Research Required Before Writing", questions: [
+            "Read the school's course catalog — find 1–2 specific courses, labs, or research opportunities you can only find there.",
+            "Look up 2–3 specific professors whose work genuinely interests the student — read their research pages, not just their bios.",
+            "Find one specific program, initiative, tradition, or student organization that connects to the student's interests.",
+            "Read the student newspaper — what are students talking about, debating, celebrating? This shows genuine interest.",
+            "Use the Common Data Set (Google: '[School Name] Common Data Set') — understanding their mission helps you mirror it back."
+          ]},
+          { section: "Why Us Essay Structure", questions: [
+            "OPENING: Start with what draws you to the school — make it specific and personal, not general.",
+            "ACADEMIC FIT: Name 1–2 specific courses, professors, or programs and explain why they matter to your goals.",
+            "COMMUNITY FIT: Name 1–2 specific clubs, traditions, or values and explain how you'll contribute — not just participate.",
+            "BRIDGE: Connect what the school offers to where you're headed — show the logic of why this is the right next step.",
+            "CLOSING: End with a forward-looking statement about what you'll bring to and take from the school.",
+            "LENGTH: Most schools want 150–300 words. Every word must earn its place."
+          ]},
+          { section: "Why Us Review Checklist", questions: [
+            "Is there at least one specific professor, course, or program named by exact title?",
+            "Is there at least one specific student organization, tradition, or campus initiative named?",
+            "Could this essay be submitted to another school with just a name swap? If yes — rewrite.",
+            "Does the essay show what the student will GIVE to the school, not just what they'll GET from it?",
+            "Does it sound like this specific student wrote it — not a generic applicant?"
+          ]}
+        ]
+      },
+      {
+        title: "Supplement Tracker & Writing Guide",
+        type: "Student Worksheet",
+        content: [
+          { section: "Build Your Supplement Inventory", questions: [
+            "For each school on your list, answer: What supplements are required and how long is each?",
+            "For each school: What is the deadline — EA, ED, or RD?",
+            "For each school: Have you done the required research (professor, course, program)?",
+            "For each school: Rate your genuine enthusiasm 1–10. Schools you rate 7+ should get your best supplements.",
+            "TOOL: CommonApp.org shows all supplement requirements once schools are added to your list."
+          ]},
+          { section: "Common Short Answer Prompts & Strategy", questions: [
+            "DIVERSITY/COMMUNITY: What perspective, background, or experience will you bring to campus? — Connect to a specific, concrete part of your identity or story.",
+            "CHALLENGE/OBSTACLE: Describe a challenge and what you learned. — Be honest and specific. Avoid vague hardship essays with no clear growth.",
+            "INTELLECTUAL INTEREST: Describe a topic, idea, or experience that has shaped your thinking. — This is where intellectual students shine. Go deep, not broad.",
+            "CREATIVE PROMPT (some schools): Use it to show a side of yourself not visible elsewhere in your application.",
+            "ADDITIONAL INFO: Only use this section if you have something meaningful to add — a grade anomaly, a family circumstance, or a significant achievement that doesn't fit anywhere else."
+          ]},
+          { section: "Supplement Writing Priorities", questions: [
+            "Week 1: Complete 'Why Us' supplements for your top 3 EA/ED schools first.",
+            "Week 2: Complete remaining 'Why Us' essays for all schools.",
+            "Week 3: Complete all community/diversity short answers.",
+            "Week 4: Complete all remaining short answers and additional prompts.",
+            "RULE: Never submit a supplement without Kari reviewing it first.",
+            "REMINDER: Quality over speed. One strong supplement beats three rushed ones."
+          ]},
+          { section: "Supplement Red Flags to Avoid", questions: [
+            "Mentioning the school's location, weather, or ranking — these are not reasons.",
+            "Saying you want to 'explore your options' — it signals no commitment.",
+            "Copying phrases directly from the school's website — admissions officers wrote that content.",
+            "Submitting the same short answer to every school without tailoring.",
+            "Exceeding the word count — it signals you can't edit or follow directions."
+          ]}
+        ]
+      }
+    ]
+  },
+  {
+    id: 8,
+    session: "Session 8",
+    title: "Final Application Review & Submission Plan",
+    goal: "Do a complete application walkthrough, confirm everything is ready, and build a post-submission strategy",
+    color: "#8A3A2A",
+    light: "#FBF0EC",
+    icon: "🎓",
+    duration: "60 min",
+    agenda: ["Full application walkthrough (25 min)", "Scholarship essay strategy (10 min)", "Submission checklist & final sign-off (15 min)", "Post-submission strategy & what comes next (10 min)"],
+    materials: [
+      {
+        title: "Final Application Review Checklist",
+        type: "Consultant Guide",
+        content: [
+          { section: "Personal Statement — Final Check", questions: [
+            "Read the essay aloud one final time. Does every word sound like this student?",
+            "Is it between 600–650 words?",
+            "Does it open with a scene or image — not a thesis or life summary?",
+            "Does it end with forward momentum — not a summary of what was just written?",
+            "Has it been checked for spelling, punctuation, and grammar in a fresh read?"
+          ]},
+          { section: "Supplements — Final Check", questions: [
+            "Is every 'Why Us' essay specific to that school — name, course, professor, program?",
+            "Does every supplement stay within the stated word or character limit?",
+            "Have all prompts been answered — not just the ones the student felt comfortable with?",
+            "Does each supplement add something new — not repeat what's already in the application?",
+            "Has the additional information section been reviewed — include only if meaningful?"
+          ]},
+          { section: "Activities List — Final Check", questions: [
+            "Are activities listed in order of importance to the student — not prestige?",
+            "Does each activity use the full 150 characters available — every word earning its place?",
+            "Do activity descriptions lead with impact and specificity, not generic titles?",
+            "Are all slots used — including jobs, family responsibilities, informal projects?",
+            "Are hours per week and weeks per year accurate and honest?"
+          ]},
+          { section: "Recommendations — Final Check", questions: [
+            "Have both teacher recommenders been formally asked and confirmed?",
+            "Has the counselor recommendation been requested with a school report?",
+            "Has the student waived their right to view recommendations?",
+            "Has a thank-you note been sent to each recommender?",
+            "Have recommenders been given: student résumé, school list, deadlines, and 2–3 story prompts?"
+          ]},
+          { section: "Application Details — Final Check", questions: [
+            "Is the student's legal name spelled correctly and consistently across all applications?",
+            "Are all demographic fields complete and accurate?",
+            "Has the application been reviewed for any unanswered required fields?",
+            "Has the student confirmed their intended major is listed correctly for each school?",
+            "Has the correct high school, GPA, and transcript information been entered?"
+          ]}
+        ]
+      },
+      {
+        title: "Scholarship Essay Strategy",
+        type: "Discussion Guide",
+        content: [
+          { section: "Where to Find Scholarships", questions: [
+            "SCHOOL-SPECIFIC: Every school on the list — check their financial aid and scholarship pages directly. Many are automatic with admission.",
+            "FASTWEB.COM: Free database — have student create a profile and check weekly for new matches.",
+            "SCHOLARSHIPS.COM: Similar to Fastweb — worth having profiles on both.",
+            "LOCAL: Community foundation, church, employer-based (parents' employers often offer these), local civic organizations.",
+            "DEPARTMENT-SPECIFIC: If applying to a specific major or program, check that department's website for awards.",
+            "BOLD.ORG: Growing database, less competitive than national scholarships — worth checking."
+          ]},
+          { section: "Scholarship Essay Strategy", questions: [
+            "Most scholarship essays reuse the same prompts: leadership, community impact, career goals, financial need.",
+            "Have the student write one strong version of each — then customize slightly for each application.",
+            "NEVER submit a scholarship essay without confirming it actually answers the prompt asked.",
+            "Financial need essays: be honest and specific — avoid vague hardship language.",
+            "Leadership essays: define leadership broadly — it does not require a formal title.",
+            "Career goals essays: be specific but not rigid — 'I plan to...' not 'I will definitely...'"
+          ]},
+          { section: "Scholarship Application Priorities", questions: [
+            "Apply to school-specific scholarships first — highest hit rate, least competition.",
+            "Apply to local scholarships second — smaller pools, higher odds.",
+            "Apply to national scholarships last — they're worth doing but most competitive.",
+            "Set a goal: 10 scholarship applications by November 1.",
+            "Track every application in a spreadsheet: scholarship name, amount, deadline, essay required, status."
+          ]}
+        ]
+      },
+      {
+        title: "Post-Submission Strategy & What Comes Next",
+        type: "Student Worksheet",
+        content: [
+          { section: "After You Submit — Demonstrated Interest", questions: [
+            "Log into each school's portal and complete your applicant profile fully.",
+            "Open every email from each school — admissions offices track email engagement at some institutions.",
+            "If a school hosts a virtual info session or accepted students event — attend it.",
+            "Consider sending a brief 'update letter' (1 paragraph) in January if you have a new significant achievement — only if it's genuinely notable.",
+            "Do NOT call or email admissions offices repeatedly asking about your status — it does not help and can hurt."
+          ]},
+          { section: "If You're Deferred from ED or EA", questions: [
+            "A deferral is not a rejection. It means: we want to see more.",
+            "Write a deferral letter (300–400 words) expressing continued strong interest and any new accomplishments since applying.",
+            "Have Kari review the deferral letter before sending.",
+            "Ask your counselor to send an updated transcript and a letter of support to the admissions office.",
+            "Continue demonstrating interest — visit if possible, attend virtual events."
+          ]},
+          { section: "If You're Waitlisted", questions: [
+            "Accept a spot on the waitlist only if you would genuinely attend if admitted.",
+            "Send a waitlist letter of continued interest (400–500 words) — stronger than a deferral letter.",
+            "Include any meaningful new achievements, awards, or recognitions since applying.",
+            "Have Kari review before sending.",
+            "Commit to your best option by May 1 and be genuinely at peace with it — waitlist outcomes are unpredictable."
+          ]},
+          { section: "Comparing Financial Aid Offers (Spring)", questions: [
+            "Do not compare sticker prices — compare NET prices after all grants and scholarships.",
+            "Calculate: Total Cost − Grants − Scholarships = Your actual out-of-pocket cost per year.",
+            "Loans are not free money — factor them into the real cost.",
+            "If a school you prefer offers less aid than a comparable school — call the financial aid office and ask to have the offer reviewed. This works more often than families expect.",
+            "Make your final decision by May 1. Notify schools you are declining as soon as possible — it frees up spots for waitlisted students."
+          ]},
+          { section: "Celebrating the Journey", questions: [
+            "Regardless of outcomes — completing a college application is a real accomplishment. Acknowledge it.",
+            "The right school is the one where this student will thrive — not necessarily the most prestigious one.",
+            "Trust the process. Students who approach applications with honesty, specificity, and genuine self-reflection find the right fit.",
+            "Kari is available through May 1 for any questions about decisions, financial aid appeals, or waitlist strategy.",
+            "Refer a friend or sibling — and thank you for the privilege of working with your family."
+          ]}
+        ]
+      }
+    ]
+  }
+];
+
+function SessionMaterials() {
+  const [activeSession, setActiveSession] = useState(0);
+  const [openMaterial, setOpenMaterial] = useState(null);
+  const [openSection, setOpenSection] = useState({});
+
+  const session = sessions[activeSession];
+
+  const toggleSection = (matIdx, secIdx) => {
+    const key = `${matIdx}-${secIdx}`;
+    setOpenSection(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const typeColors = {
+    "Discussion Guide": "#2C4A7C",
+    "Student Worksheet": "#1A3A2A",
+    "Student Homework": "#6B3A2A",
+    "Consultant Guide": "#5C3D7A",
+  };
+
+  return (
+    <div style={{ fontFamily: "'Georgia', serif", background: "#0F1923", minHeight: "100vh", color: "#F0EBE3" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+        * { box-sizing: border-box; }
+        .sess-btn { cursor: pointer; transition: all 0.2s; border: none; }
+        .sess-btn:hover { filter: brightness(1.1); }
+        .mat-card { cursor: pointer; transition: all 0.2s; }
+        .mat-card:hover { transform: translateY(-2px); }
+        .sec-btn { cursor: pointer; transition: background 0.15s; }
+        .sec-btn:hover { background: rgba(255,255,255,0.05) !important; }
+        .fade-in { animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+      `}</style>
+
+      {/* Top Nav */}
+      <div style={{ background: "#0A1219", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "0 20px", overflowX: "auto" }}>
+        <div style={{ display: "flex", maxWidth: 900, margin: "0 auto", gap: 0 }}>
+          {sessions.map((s, i) => (
+            <button
+              key={i}
+              className="sess-btn"
+              onClick={() => { setActiveSession(i); setOpenMaterial(null); setOpenSection({}); }}
+              style={{
+                background: "none",
+                color: activeSession === i ? "#fff" : "rgba(255,255,255,0.45)",
+                padding: "16px 14px",
+                fontSize: 12,
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: activeSession === i ? 600 : 400,
+                borderBottom: activeSession === i ? `2px solid ${s.color === "#2C4A7C" ? "#6B9FE0" : s.color === "#6B3A2A" ? "#E0956B" : s.color === "#1A3A2A" ? "#6BE0A0" : s.color === "#5C3D7A" ? "#B06BE0" : s.color === "#7A5C1A" ? "#E0C06B" : "#6BE0E0"}` : "2px solid transparent",
+                whiteSpace: "nowrap",
+                cursor: "pointer",
+                letterSpacing: 0.3
+              }}
+            >
+              {s.icon} S{s.id}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "28px 16px" }}>
+
+        {/* Session Header */}
+        <div className="fade-in" style={{ marginBottom: 28 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+            <div>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: "rgba(255,255,255,0.4)", margin: "0 0 6px" }}>
+                {session.session} · {session.duration}
+              </p>
+              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(24px, 5vw, 38px)", margin: "0 0 6px", fontWeight: 600, lineHeight: 1.2 }}>
+                {session.icon} {session.title}
+              </h1>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.55)", margin: 0 }}>
+                <strong style={{ color: "rgba(255,255,255,0.8)" }}>Goal:</strong> {session.goal}
+              </p>
+            </div>
+          </div>
+
+          {/* Agenda */}
+          <div style={{ marginTop: 20, background: "rgba(255,255,255,0.04)", borderRadius: 12, padding: "16px 20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(255,255,255,0.4)", margin: "0 0 10px" }}>Session Agenda</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {session.agenda.map((item, i) => (
+                <span key={i} style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  background: "rgba(255,255,255,0.07)", padding: "4px 12px",
+                  borderRadius: 20, color: "rgba(255,255,255,0.7)"
+                }}>
+                  <span style={{ opacity: 0.5, marginRight: 4 }}>{i + 1}.</span>{item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Materials */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14, marginBottom: 24 }}>
+          {session.materials.map((mat, mi) => (
+            <div
+              key={mi}
+              className="mat-card fade-in"
+              onClick={() => setOpenMaterial(openMaterial === mi ? null : mi)}
+              style={{
+                background: openMaterial === mi ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
+                border: `1px solid ${openMaterial === mi ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.08)"}`,
+                borderRadius: 12, padding: "18px 20px"
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 10, letterSpacing: 1.5,
+                    textTransform: "uppercase", padding: "2px 8px", borderRadius: 4,
+                    background: `${typeColors[mat.type] || "#444"}33`,
+                    color: typeColors[mat.type] || "#aaa", display: "inline-block", marginBottom: 8
+                  }}>{mat.type}</span>
+                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, fontWeight: 600, margin: "0 0 4px", lineHeight: 1.3 }}>
+                    {mat.title}
+                  </h3>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>
+                    {mat.content.length} sections
+                  </p>
+                </div>
+                <span style={{ fontSize: 18, opacity: 0.4, marginLeft: 8 }}>{openMaterial === mi ? "▲" : "▼"}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Expanded Material */}
+        {openMaterial !== null && (
+          <div className="fade-in" style={{
+            background: "rgba(255,255,255,0.03)", borderRadius: 14,
+            border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", marginBottom: 24
+          }}>
+            <div style={{ padding: "18px 22px", borderBottom: "1px solid rgba(255,255,255,0.07)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(255,255,255,0.35)", margin: "0 0 4px" }}>
+                  {session.materials[openMaterial].type}
+                </p>
+                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, margin: 0 }}>
+                  {session.materials[openMaterial].title}
+                </h2>
+              </div>
+              <button onClick={() => setOpenMaterial(null)} style={{ background: "rgba(255,255,255,0.07)", border: "none", color: "rgba(255,255,255,0.5)", borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: 12 }}>
+                Close ✕
+              </button>
+            </div>
+
+            {session.materials[openMaterial].content.map((sec, si) => {
+              const secKey = `${openMaterial}-${si}`;
+              const isSecOpen = openSection[secKey] !== false; // default open
+              return (
+                <div key={si} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                  <div
+                    className="sec-btn"
+                    onClick={() => toggleSection(openMaterial, si)}
+                    style={{ padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                  >
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+                      {sec.section}
+                    </p>
+                    <span style={{ fontSize: 12, color: "rgba(255,255,255,0.3)" }}>{isSecOpen ? "▲" : "▼"}</span>
+                  </div>
+                  {isSecOpen && (
+                    <div style={{ padding: "0 22px 16px" }}>
+                      {sec.questions.map((q, qi) => (
+                        <div key={qi} style={{
+                          padding: "10px 14px", marginBottom: 6,
+                          background: "rgba(255,255,255,0.03)", borderRadius: 8,
+                          borderLeft: `2px solid rgba(255,255,255,0.1)`
+                        }}>
+                          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.75)", margin: 0, lineHeight: 1.6 }}>
+                            {q}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Footer */}
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.25)", textAlign: "center" }}>
+          Kari Ursu · College Admissions Consulting · kariursu8@gmail.com
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(SessionMaterials));
+</script>
+</body>
+</html>

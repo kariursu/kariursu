@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kari Ursu · Consultant Dashboard</title>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1B2E4A; --navy2: #0F1E33; --gold: #C8A86B; --gold2: #E8C98A;
+    --warm: #F7F3EE; --warm2: #EDE6DA; --text: #1A1A1A; --mid: #6B7A8D;
+    --green: #2A5C3A; --red: #8A2A2A; --purple: #5C3D7A; --teal: #2A5C5C;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--navy2); color: #fff; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  header {
+    background: rgba(15,30,51,0.98); border-bottom: 1px solid rgba(200,168,107,0.2);
+    padding: 20px 24px; position: sticky; top: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .header-left h1 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; }
+  .header-left h1 span { color: var(--gold); font-style: italic; }
+  .header-left p { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 2px; }
+  .date-badge { background: rgba(200,168,107,0.1); border: 1px solid rgba(200,168,107,0.2); color: var(--gold); font-size: 11px; font-weight: 500; letter-spacing: 1px; padding: 6px 14px; border-radius: 20px; }
+
+  /* ── LAYOUT ── */
+  main { max-width: 900px; margin: 0 auto; padding: 32px 16px 80px; }
+
+  /* ── REVENUE WIDGET ── */
+  .revenue-widget {
+    background: linear-gradient(135deg, var(--navy) 0%, #243B5A 100%);
+    border: 1px solid rgba(200,168,107,0.2); border-radius: 16px;
+    padding: 24px 28px; margin-bottom: 32px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+  }
+  .rev-item { text-align: center; }
+  .rev-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+  .rev-val { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--gold); }
+  .rev-sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 3px; }
+  .rev-input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 600; text-align: center; padding: 6px; margin-top: 4px; outline: none; }
+  .rev-input:focus { border-color: var(--gold); }
+  .rev-divider { width: 1px; background: rgba(255,255,255,0.08); }
+  .rev-progress-wrap { margin-top: 20px; grid-column: 1 / -1; }
+  .rev-progress-label { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .rev-progress-track { background: rgba(255,255,255,0.08); border-radius: 6px; height: 10px; overflow: hidden; }
+  .rev-progress-fill { background: linear-gradient(90deg, var(--gold), #2A5C3A); height: 100%; border-radius: 6px; transition: width 0.6s ease; }
+
+  /* ── SECTION HEADERS ── */
+  .section-header { margin: 36px 0 16px; display: flex; align-items: center; gap: 10px; }
+  .section-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; }
+  .section-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+  .section-tag { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+
+  /* ── TOOL CARDS ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 20px; text-decoration: none; color: #fff;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: all 0.2s ease; cursor: pointer;
+  }
+  .card:hover { background: rgba(255,255,255,0.08); border-color: rgba(200,168,107,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .card-icon { font-size: 24px; flex-shrink: 0; }
+  .card-badge { font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; line-height: 1.2; }
+  .card-desc { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.5; }
+  .card-action { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-top: auto; }
+
+  /* ── CLIENT TRACKER ── */
+  .client-tracker { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin-bottom: 32px; }
+  .tracker-header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; }
+  .tracker-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; }
+  .add-btn { background: var(--gold); color: var(--navy2); border: none; border-radius: 6px; padding: 7px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .add-btn:hover { background: var(--gold2); }
+  .tracker-table { width: 100%; border-collapse: collapse; }
+  .tracker-table th { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 10px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .tracker-table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .tracker-table tr:last-child td { border-bottom: none; }
+  .tracker-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .status-pill { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 10px; }
+  .status-active { background: rgba(42,92,58,0.3); color: #6BE0A0; }
+  .status-pending { background: rgba(200,168,107,0.15); color: var(--gold); }
+  .status-complete { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+  .del-btn { background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 4px; transition: all 0.15s; }
+  .del-btn:hover { color: #E07070; background: rgba(138,42,42,0.2); }
+  .empty-row td { text-align: center; color: rgba(255,255,255,0.2); font-style: italic; padding: 24px; }
+  .editable { background: transparent; border: none; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; width: 100%; outline: none; cursor: pointer; }
+  .editable:focus { background: rgba(255,255,255,0.05); border-radius: 4px; padding: 2px 6px; cursor: text; }
+
+  /* ── QUICK LINKS ── */
+  .quick-links { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .quick-link { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 6px 14px; text-decoration: none; color: rgba(255,255,255,0.6); font-size: 12px; font-weight: 500; transition: all 0.15s; }
+  .quick-link:hover { background: rgba(200,168,107,0.1); border-color: rgba(200,168,107,0.3); color: var(--gold); }
+
+  /* ── NOTES ── */
+  .notes-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; }
+  .notes-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+  .notes-area { width: 100%; background: transparent; border: none; color: rgba(255,255,255,0.7); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; line-height: 1.7; resize: vertical; min-height: 100px; outline: none; }
+  .notes-area::placeholder { color: rgba(255,255,255,0.15); }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; padding: 24px; font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 0.5px; }
+
+  @media (max-width: 600px) {
+    .revenue-widget { grid-template-columns: 1fr 1fr; }
+    .rev-divider { display: none; }
+    header { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Kari <span>Ursu</span></h1>
+    <p>Consultant Dashboard · Private</p>
+  </div>
+  <div class="date-badge" id="date-badge">Loading...</div>
+</header>
+
+<main>
+
+  <!-- REVENUE TRACKER -->
+  <div class="revenue-widget">
+    <div class="rev-item">
+      <div class="rev-label">Collected So Far</div>
+      <div>$<input class="rev-input" id="collected" type="number" value="0" min="0" oninput="updateRevenue()"/></div>
+      <div class="rev-sub">Update each payment</div>
+    </div>
+    <div class="rev-divider"></div>
+    <div class="rev-item">
+      <div class="rev-label">Active Clients</div>
+      <div><input class="rev-input" id="clients" type="number" value="0" min="0" oninput="updateRevenue()"/></div>
+      <div class="rev-sub">Currently working with</div>
+    </div>
+    <div class="rev-divider"></div>
+    <div class="rev-item">
+      <div class="rev-label">Goal</div>
+      <div class="rev-val">$40,000</div>
+      <div class="rev-sub">By August 1, 2026</div>
+    </div>
+    <div class="rev-progress-wrap">
+      <div class="rev-progress-label">
+        <span>Progress to $40k</span>
+        <span id="rev-pct">0%</span>
+      </div>
+      <div class="rev-progress-track">
+        <div class="rev-progress-fill" id="rev-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="section-header">
+    <h2>Quick Links</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="quick-links">
+    <a class="quick-link" href="https://calendly.com" target="_blank">📅 Calendly</a>
+    <a class="quick-link" href="https://drive.google.com" target="_blank">📁 Google Drive</a>
+    <a class="quick-link" href="https://docs.google.com" target="_blank">📝 Google Docs</a>
+    <a class="quick-link" href="https://forms.google.com" target="_blank">📋 Google Forms</a>
+    <a class="quick-link" href="https://meet.google.com" target="_blank">📹 Google Meet</a>
+    <a class="quick-link" href="https://dashboard.stripe.com" target="_blank">💳 Stripe</a>
+    <a class="quick-link" href="kariursu.github.io/kariursu" target="_blank">🌐 My Website</a>
+    <a class="quick-link" href="https://linkedin.com" target="_blank">💼 LinkedIn</a>
+  </div>
+
+  <!-- CLIENT TRACKER -->
+  <div class="section-header">
+    <h2>Client Tracker</h2>
+    <div class="section-line"></div>
+    <span class="section-tag">Summer 2026</span>
+  </div>
+  <div class="client-tracker">
+    <div class="tracker-header">
+      <span class="tracker-title">Active & Pending Clients</span>
+      <button class="add-btn" onclick="addClient()">+ Add Client</button>
+    </div>
+    <table class="tracker-table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Package</th>
+          <th>Total</th>
+          <th>Deposit</th>
+          <th>Session</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="client-tbody">
+        <tr class="empty-row"><td colspan="7">No clients yet — click + Add Client to get started</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BEFORE CALLS -->
+  <div class="section-header">
+    <h2>Before Every Call</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+    <a class="card" href="discovery-call.html">
+      <div class="card-top">
+        <span class="card-icon">📞</span>
+        <span class="card-badge" style="background:rgba(42,92,58,0.3);color:#6BE0A0">Live Script</span>
+      </div>
+      <div class="card-title">Discovery Call Guide</div>
+      <div class="card-desc">Full 20-minute call script — warm up, discover, present, close, objections</div>
+      <div class="card-action">Open Guide →</div>
+    </a>
+    <a class="card" href="packages.html">
+      <div class="card-top">
+        <span class="card-icon">💼</span>
+        <span class="card-badge" style="background:rgba(200,168,107,0.15);color:var(--gold)">Pricing</span>
+      </div>
+      <div class="card-title">Consulting Packages</div>
+      <div class="card-desc">All 3 tiers with pricing, deliverables, and revenue breakdown</div>
+      <div class="card-action">Open Packages →</div>
+    </a>
+    <a class="card" href="intake-form.html">
+      <div class="card-top">
+        <span class="card-icon">📝</span>
+        <span class="card-badge" style="background:rgba(92,61,122,0.3);color:#B06BE0">Onboarding</span>
+      </div>
+      <div class="card-title">Client Intake Form</div>
+      <div class="card-desc">Send to families after deposit — all 5 sections, student + parent info</div>
+      <div class="card-action">Open Form →</div>
+    </a>
+  </div>
+
+  <!-- DURING SESSIONS -->
+  <div class="section-header">
+    <h2>During Sessions</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+    <a class="card" href="session-materials.html">
+      <div class="card-top">
+        <span class="card-icon">🎓</span>
+        <span class="card-badge" style="background:rgba(27,46,74,0.5);color:#6B9FE0">All 8 Sessions</span>
+      </div>
+      <div class="card-title">Session Materials</div>
+      <div class="card-desc">Complete toolkit for all 8 sessions — questions, worksheets, homework, consultant guides</div>
+      <div class="card-action">Open Materials →</div>
+    </a>
+    <a class="card" href="session-materials.html#s1">
+      <div class="card-top"><span class="card-icon">🧭</span><span class="card-badge" style="background:rgba(44,74,124,0.3);color:#6B9FE0">Session 1</span></div>
+      <div class="card-title">Student Story & Discovery</div>
+      <div class="card-desc">Story questions, values ranking exercise</div>
+      <div class="card-action">Open →</div>
+    </a>
+    <a class="card" href="session-materials.html#s2">
+      <div class="card-top"><span class="card-icon">🗺️</span><span class="card-badge" style="background:rgba(107,58,42,0.3);color:#E0956B">Session 2</span></div>
+      <div class="card-title">College List Strategy</div>
+      <div class="card-desc">Criteria worksheet, research assignment</div>
+      <div class="card-action">Open →</div>
+    </a>
+    <a class="card" href="session-materials.html#s3">
+      <div class="card-top"><span class="card-icon">✍️</span><span class="card-badge" style="background:rgba(26,58,42,0.3);color:#6BE0A0">Session 3</span></div>
+      <div class="card-title">Personal Statement Strategy</div>
+      <div class="card-desc">Topic mining, Common App prompts, Draft 1 assignment</div>
+      <div class="card-action">Open →</div>
+    </a>
+    <a class="card" href="session-materials.html#s4">
+      <div class="card-top"><span class="card-icon">🔍</span><span class="card-badge" style="background:rgba(92,61,122,0.3);color:#B06BE0">Session 4</span></div>
+      <div class="card-title">Essay Feedback & Revision</div>
+      <div class="card-desc">Feedback framework, structural checklist, supplement guide</div>
+      <div class="card-action">Open →</div>
+    </a>
+    <a class="card" href="session-materials.html#s5">
+      <div class="card-top"><span class="card-icon">📅</span><span class="card-badge" style="background:rgba(122,92,26,0.3);color:#E0C06B">Session 5</span></div>
+      <div class="card-title">Application Strategy & Timeline</div>
+      <div class="card-desc">School-by-school plan, ED vs EA guide, rec letter strategy</div>
+      <div class="card-action">Open →</div>
+    </a>
+    <a class="card" href="session-materials.html#s6">
+      <div class="card-top"><span class="card-icon">🎤</span><span class="card-badge" style="background:rgba(42,92,92,0.3);color:#6BE0E0">Session 6</span></div>
+      <div class="card-title">Interview Prep</div>
+      <div class="card-desc">Question bank, mock interview scoresheet, mindset coaching</div>
+      <div class="card-action">Open →</div>
+    </a>
+    <a class="card" href="session-materials.html#s7">
+      <div class="card-top"><span class="card-icon">🏫</span><span class="card-badge" style="background:rgba(42,92,58,0.3);color:#6BE0A0">Session 7</span></div>
+      <div class="card-title">Supplemental Essays</div>
+      <div class="card-desc">Why Us masterclass, supplement tracker, school-specific strategy</div>
+      <div class="card-action">Open →</div>
+    </a>
+    <a class="card" href="session-materials.html#s8">
+      <div class="card-top"><span class="card-icon">🎓</span><span class="card-badge" style="background:rgba(138,58,42,0.3);color:#E07070">Session 8</span></div>
+      <div class="card-title">Final Review & Submission</div>
+      <div class="card-desc">Full application checklist, scholarship strategy, post-submission plan</div>
+      <div class="card-action">Open →</div>
+    </a>
+  </div>
+
+  <!-- BUSINESS MANAGEMENT -->
+  <div class="section-header">
+    <h2>Business Management</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+    <a class="card" href="steps.html">
+      <div class="card-top">
+        <span class="card-icon">✅</span>
+        <span class="card-badge" style="background:rgba(200,168,107,0.15);color:var(--gold)">Launch</span>
+      </div>
+      <div class="card-title">Step-by-Step Guide</div>
+      <div class="card-desc">All 6 phases to hit $40k — set up, outreach, calls, deliver, track</div>
+      <div class="card-action">Open Guide →</div>
+    </a>
+    <a class="card" href="action-plan.html">
+      <div class="card-top">
+        <span class="card-icon">📆</span>
+        <span class="card-badge" style="background:rgba(42,92,58,0.3);color:#6BE0A0">Tracker</span>
+      </div>
+      <div class="card-title">8-Week Action Plan</div>
+      <div class="card-desc">Week-by-week tasks with checkboxes and progress tracking</div>
+      <div class="card-action">Open Plan →</div>
+    </a>
+    <a class="card" href="packages.html">
+      <div class="card-top">
+        <span class="card-icon">📊</span>
+        <span class="card-badge" style="background:rgba(200,168,107,0.15);color:var(--gold)">Revenue</span>
+      </div>
+      <div class="card-title">Revenue Breakdown</div>
+      <div class="card-desc">Path to $40k — package mix, client numbers, goal tracker</div>
+      <div class="card-action">Open →</div>
+    </a>
+  </div>
+
+  <!-- SEND TO CLIENTS -->
+  <div class="section-header">
+    <h2>Send to Clients</h2>
+    <div class="section-line"></div>
+    <span class="section-tag">Save these to Google Drive</span>
+  </div>
+  <div class="cards">
+    <div class="card" style="cursor:default;">
+      <div class="card-top"><span class="card-icon">📄</span><span class="card-badge" style="background:rgba(200,168,107,0.15);color:var(--gold)">PDF</span></div>
+      <div class="card-title">Family Info Sheet</div>
+      <div class="card-desc">Kari_Ursu_Admissions_Consulting.pdf — send to prospective families</div>
+      <div class="card-action" style="color:rgba(255,255,255,0.3)">Saved in Google Drive</div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div class="card-top"><span class="card-icon">📑</span><span class="card-badge" style="background:rgba(92,61,122,0.3);color:#B06BE0">Contract</span></div>
+      <div class="card-title">Consulting Agreement</div>
+      <div class="card-desc">Kari_Ursu_Consulting_Agreement.docx — send after verbal yes</div>
+      <div class="card-action" style="color:rgba(255,255,255,0.3)">Saved in Google Drive</div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div class="card-top"><span class="card-icon">🧾</span><span class="card-badge" style="background:rgba(42,92,58,0.3);color:#6BE0A0">Invoices</span></div>
+      <div class="card-title">3 Invoice Templates</div>
+      <div class="card-desc">Essay Intensive · Full Admissions · VIP Concierge — send with deposit request</div>
+      <div class="card-action" style="color:rgba(255,255,255,0.3)">Saved in Google Drive</div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section-header">
+    <h2>Session Notes</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="notes-box">
+    <div class="notes-label">Quick Notes · Auto-saves as you type</div>
+    <textarea class="notes-area" id="notes" placeholder="Jot down anything here — client notes, follow-up reminders, ideas..."></textarea>
+  </div>
+
+</main>
+
+<footer>Private Consultant Dashboard · Kari Ursu · Not linked from public website · kariursu8@gmail.com</footer>
+
+<script>
+// Date
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const now = new Date();
+document.getElementById('date-badge').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+
+// Revenue tracker
+function updateRevenue() {
+  const collected = parseFloat(document.getElementById('collected').value) || 0;
+  const goal = 40000;
+  const pct = Math.min(Math.round((collected / goal) * 100), 100);
+  document.getElementById('rev-pct').textContent = pct + '%';
+  document.getElementById('rev-fill').style.width = Math.max(pct, 1) + '%';
+  localStorage.setItem('kari_collected', collected);
+  localStorage.setItem('kari_clients', document.getElementById('clients').value);
+}
+
+// Client tracker
+let clientData = JSON.parse(localStorage.getItem('kari_clients_data') || '[]');
+
+function saveClients() {
+  localStorage.setItem('kari_clients_data', JSON.stringify(clientData));
+}
+
+function renderClients() {
+  const tbody = document.getElementById('client-tbody');
+  if (clientData.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No clients yet — click + Add Client to get started</td></tr>';
+    return;
+  }
+  tbody.innerHTML = clientData.map((c, i) => `
+    <tr>
+      <td><input class="editable" value="${c.student}" onchange="clientData[${i}].student=this.value;saveClients()" placeholder="Student name"/></td>
+      <td>
+        <select class="editable" style="cursor:pointer" onchange="clientData[${i}].pkg=this.value;saveClients()">
+          <option ${c.pkg==='Essay Intensive'?'selected':''}>Essay Intensive</option>
+          <option ${c.pkg==='Full Admissions'?'selected':''}>Full Admissions</option>
+          <option ${c.pkg==='VIP Concierge'?'selected':''}>VIP Concierge</option>
+        </select>
+      </td>
+      <td><input class="editable" value="${c.total}" onchange="clientData[${i}].total=this.value;saveClients()" placeholder="$0"/></td>
+      <td><input class="editable" value="${c.deposit}" onchange="clientData[${i}].deposit=this.value;saveClients()" placeholder="Paid?"/></td>
+      <td><input class="editable" value="${c.session}" onchange="clientData[${i}].session=this.value;saveClients()" placeholder="1"/></td>
+      <td>
+        <select class="editable" style="cursor:pointer" onchange="clientData[${i}].status=this.value;saveClients();renderClients()">
+          <option ${c.status==='Active'?'selected':''}>Active</option>
+          <option ${c.status==='Pending'?'selected':''}>Pending</option>
+          <option ${c.status==='Complete'?'selected':''}>Complete</option>
+        </select>
+      </td>
+      <td><button class="del-btn" onclick="clientData.splice(${i},1);saveClients();renderClients()">✕</button></td>
+    </tr>`).join('');
+}
+
+function addClient() {
+  clientData.push({ student:'New Student', pkg:'Full Admissions', total:'$4,500', deposit:'Pending', session:'1', status:'Pending' });
+  saveClients();
+  renderClients();
+}
+
+// Notes auto-save
+const notesEl = document.getElementById('notes');
+notesEl.value = localStorage.getItem('kari_notes') || '';
+notesEl.addEventListener('input', () => localStorage.setItem('kari_notes', notesEl.value));
+
+// Restore saved values
+const savedCollected = localStorage.getItem('kari_collected');
+const savedClients = localStorage.getItem('kari_clients');
+if (savedCollected) document.getElementById('collected').value = savedCollected;
+if (savedClients) document.getElementById('clients').value = savedClients;
+updateRevenue();
+renderClients();
+</script>
+</body>
+</html>
