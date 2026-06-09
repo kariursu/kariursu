@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kari Ursu · Consulting Packages</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+
+const packages = [
+  {
+    name: "Essay Intensive",
+    price: "$1,500",
+    priceNum: 1500,
+    tag: "Best for: Families who have a plan but need essay help",
+    color: "#C8A96E",
+    sessions: "4 sessions (60 min each)",
+    timeline: "4–6 weeks",
+    deliverables: [
+      "Personal statement brainstorm & topic selection",
+      "3 full rounds of essay feedback & editing",
+      "2 supplemental essay reviews",
+      "Final polish before submission",
+      "Email support throughout"
+    ],
+    note: null
+  },
+  {
+    name: "Full Admissions Package",
+    price: "$4,500",
+    priceNum: 4500,
+    tag: "Most popular · Best for: Families who want end-to-end support",
+    color: "#2C5F8A",
+    sessions: "8 sessions (60 min each)",
+    timeline: "Full summer (June–August)",
+    deliverables: [
+      "College list strategy (reach, match, safety)",
+      "Application timeline & priority roadmap",
+      "Personal statement — full development & editing",
+      "Up to 6 supplemental essay reviews",
+      "Activity list & résumé review",
+      "Interview prep (1 mock session)",
+      "Final application review before submission",
+      "Unlimited email support"
+    ],
+    note: "⭐ This is the package that gets results — and the one Kari recommends for most families."
+  },
+  {
+    name: "VIP Concierge",
+    price: "$8,500",
+    priceNum: 8500,
+    tag: "Best for: Families who want a true partner through every step",
+    color: "#1A3A2A",
+    sessions: "Unlimited sessions through 11/1 deadline",
+    timeline: "June through Early Decision deadline",
+    deliverables: [
+      "Everything in Full Admissions Package",
+      "Unlimited sessions through November 1",
+      "School-specific application strategy per college",
+      "All supplemental essays (unlimited reviews)",
+      "Scholarship essay support",
+      "Waitlist / deferral strategy if needed",
+      "Priority 24-hr response time",
+      "Parent update calls (monthly)"
+    ],
+    note: "🔒 Only 2 spots available at this level."
+  }
+];
+
+const goalData = [
+  { label: "Essay Intensive × 3", revenue: 4500, clients: 3, color: "#C8A96E" },
+  { label: "Full Package × 7", revenue: 31500, clients: 7, color: "#2C5F8A" },
+  { label: "VIP × 1", revenue: 8500, clients: 1, color: "#1A3A2A" },
+];
+
+function ConsultingPackages() {
+  const [selected, setSelected] = useState(null);
+  const [showGoal, setShowGoal] = useState(false);
+
+  const total = 44500;
+
+  return (
+    <div style={{
+      fontFamily: "'Georgia', 'Times New Roman', serif",
+      background: "#FAF8F5",
+      minHeight: "100vh",
+      padding: "40px 20px",
+      color: "#1a1a1a"
+    }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+        * { box-sizing: border-box; }
+        .card { transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+        .card.selected { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.18); }
+        .check { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .pill { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-family: 'Source Sans 3', sans-serif; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+        .bar-fill { transition: width 1s ease; }
+      `}</style>
+
+      <div style={{ maxWidth: 860, margin: "0 auto" }}>
+
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, letterSpacing: 3, textTransform: "uppercase", color: "#888", marginBottom: 12 }}>
+            Kari Ursu · College Admissions Consulting
+          </p>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 700, margin: "0 0 12px", lineHeight: 1.2 }}>
+            Your Student Deserves<br /><em>a Guide Who's Been There.</em>
+          </h1>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 16, color: "#555", maxWidth: 480, margin: "0 auto", lineHeight: 1.6 }}>
+            10+ years in college preparatory education · Johns Hopkins MLA · AP & Honors instructor · Limited summer spots
+          </p>
+        </div>
+
+        {/* Packages */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 40 }}>
+          {packages.map((pkg, i) => (
+            <div
+              key={i}
+              className={`card ${selected === i ? "selected" : ""}`}
+              onClick={() => setSelected(selected === i ? null : i)}
+              style={{
+                background: selected === i ? pkg.color : "#fff",
+                color: selected === i ? "#fff" : "#1a1a1a",
+                borderRadius: 16,
+                padding: 28,
+                border: `2px solid ${selected === i ? pkg.color : "#e8e4de"}`,
+                position: "relative",
+                overflow: "hidden"
+              }}
+            >
+              {i === 1 && (
+                <div style={{
+                  position: "absolute", top: 16, right: -24, background: "#C8A96E",
+                  color: "#fff", fontSize: 10, fontFamily: "'Source Sans 3', sans-serif",
+                  fontWeight: 700, letterSpacing: 1, textTransform: "uppercase",
+                  padding: "4px 32px", transform: "rotate(45deg) translateX(10px)",
+                  transformOrigin: "right center"
+                }}>Popular</div>
+              )}
+
+              <div style={{ marginBottom: 20 }}>
+                <p style={{
+                  fontFamily: "'Source Sans 3', sans-serif", fontSize: 11, letterSpacing: 2,
+                  textTransform: "uppercase", opacity: 0.6, margin: "0 0 6px"
+                }}>Package {i + 1}</p>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, margin: "0 0 4px" }}>
+                  {pkg.name}
+                </h2>
+                <p style={{ fontSize: 32, fontWeight: 700, fontFamily: "'Source Sans 3', sans-serif", margin: "8px 0 4px" }}>
+                  {pkg.price}
+                </p>
+                <p style={{
+                  fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
+                  opacity: 0.65, margin: 0, lineHeight: 1.4
+                }}>{pkg.tag}</p>
+              </div>
+
+              <div style={{ borderTop: `1px solid ${selected === i ? "rgba(255,255,255,0.2)" : "#f0ebe4"}`, paddingTop: 16, marginBottom: 16 }}>
+                <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, opacity: 0.7, margin: "0 0 4px" }}>
+                  📅 {pkg.sessions}
+                </p>
+                <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, opacity: 0.7, margin: 0 }}>
+                  ⏱ {pkg.timeline}
+                </p>
+              </div>
+
+              <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+                {pkg.deliverables.map((d, j) => (
+                  <li key={j} className="check" style={{
+                    fontFamily: "'Source Sans 3', sans-serif", fontSize: 13,
+                    padding: "4px 0", display: "flex", gap: 8, alignItems: "flex-start",
+                    opacity: selected === i ? 0.95 : 0.8, lineHeight: 1.4
+                  }}>
+                    <span style={{ color: selected === i ? "rgba(255,255,255,0.8)" : pkg.color, flexShrink: 0 }}>✓</span>
+                    {d}
+                  </li>
+                ))}
+              </ul>
+
+              {pkg.note && (
+                <p style={{
+                  fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
+                  marginTop: 16, padding: "10px 12px",
+                  background: selected === i ? "rgba(255,255,255,0.15)" : "#f7f3ee",
+                  borderRadius: 8, lineHeight: 1.5,
+                  color: selected === i ? "#fff" : "#555"
+                }}>{pkg.note}</p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Revenue Goal Tracker */}
+        <div style={{
+          background: "#fff", borderRadius: 16, padding: 28,
+          border: "2px solid #e8e4de", marginBottom: 32
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+            <div>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, margin: "0 0 4px" }}>
+                Path to $40k
+              </h3>
+              <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 13, color: "#888", margin: 0 }}>
+                How to hit your goal by August 1st
+              </p>
+            </div>
+            <button
+              onClick={() => setShowGoal(!showGoal)}
+              style={{
+                background: "#2C5F8A", color: "#fff", border: "none",
+                borderRadius: 8, padding: "8px 16px", cursor: "pointer",
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 13, fontWeight: 600
+              }}
+            >{showGoal ? "Hide" : "Show breakdown"}</button>
+          </div>
+
+          {showGoal && (
+            <div>
+              {goalData.map((item, i) => (
+                <div key={i} style={{ marginBottom: 16 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                    <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 14, fontWeight: 600 }}>{item.label}</span>
+                    <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 14, color: "#555" }}>
+                      ${item.revenue.toLocaleString()}
+                    </span>
+                  </div>
+                  <div style={{ background: "#f0ebe4", borderRadius: 4, height: 10, overflow: "hidden" }}>
+                    <div className="bar-fill" style={{
+                      background: item.color, height: "100%", borderRadius: 4,
+                      width: `${(item.revenue / total) * 100}%`
+                    }} />
+                  </div>
+                </div>
+              ))}
+              <div style={{
+                marginTop: 20, padding: "16px 20px", background: "#f7f3ee",
+                borderRadius: 10, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8
+              }}>
+                <div>
+                  <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 13, color: "#888", margin: "0 0 2px" }}>Combined total (11 clients)</p>
+                  <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, margin: 0, color: "#1A3A2A" }}>
+                    $44,500
+                  </p>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 13, color: "#888", margin: "0 0 2px" }}>Goal</p>
+                  <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, margin: 0, color: "#C8A96E" }}>$40,000 ✓</p>
+                </div>
+              </div>
+              <p style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 13, color: "#777",
+                marginTop: 12, lineHeight: 1.5
+              }}>
+                💡 Even without a VIP client, 8 Full Packages + 3 Essay Intensives = <strong>$40,500</strong>. Goal hit with just 11 clients.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Footer CTA */}
+        <div style={{ textAlign: "center", padding: "24px 0" }}>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 13, color: "#888" }}>
+            Ready to book a free 20-minute discovery call?
+          </p>
+          <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, margin: "4px 0" }}>
+            kariursu8@gmail.com · 941-773-9947
+          </p>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, color: "#aaa", marginTop: 16 }}>
+            Limited spots · Summer 2026 · Orlando, FL & Virtual
+          </p>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(ConsultingPackages));
+</script>
+</body>
+</html>
